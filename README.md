@@ -116,6 +116,7 @@ When `OTP_DEV_MODE=true` in `.env`:
 Copy `.env.example` to `.env.local` (or `.env`) and configure integrations before using them:
 
 - `ANTHROPIC_API_KEY` enables server-side Claude photo analysis and WasteBot. Keep this key server-only.
+- The standalone photo-recognition flow in `js/seller.js` calls the Supabase `ai` Edge Function. Its provider credentials and quota are configured separately from Render; check that function's logs and the AI provider's quota when recognition fails.
 - `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` and `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET` enable up to five unsigned image uploads. Restrict the preset to images.
 - `STRIPE_SECRET_KEY` must be a Stripe test-mode key to run test checkout. Stripe Connect onboarding is required for seller transfers. Checkout uses manual capture; the buyer's pickup confirmation triggers capture and seller payout. Ensure your Stripe account supports INR and Connect transfers.
 - `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` enable OAuth. Register `${NEXT_PUBLIC_APP_URL}/api/auth/google/callback` as an authorized redirect URI.

@@ -122,7 +122,12 @@ async function analyse() {
   aiState = 'ready'; if (d.items.length) toast(`Found ${d.items.length} material${d.items.length > 1 ? 's' : ''}. Add rough quantities.`);
  } catch (e) {
   if (draft !== d) return; aiState = 'off';
-  d.msg = /demand|busy|overload|rate/i.test(e && e.message || '') ? 'The AI is very busy right now. Tap “Try AI again” in a minute, or add the materials by hand below.' : 'Photo recognition isn’t available right now. Tap “Try AI again”, or add the materials by hand below.';
+  const error = String(e && e.message || '');
+  d.msg = /quota|resource_exhausted|daily.*limit/i.test(error)
+   ? 'Photo analysis has reached its Google Gemini request quota. Try again after the quota resets, or ask the site administrator to enable billing or increase the Gemini API quota. You can add materials by hand below.'
+   : /429|rate.?limit|demand|busy|overload/i.test(error)
+    ? 'The AI service is temporarily rate-limited. Try again later, or add the materials by hand below.'
+    : 'Photo recognition is unavailable right now. Tap "Try AI again", or add materials by hand below.';
  }
  d.loading = false; render();
 }
