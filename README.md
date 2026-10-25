@@ -17,7 +17,7 @@ Files: `catalog.js` (materials + reference prices), `js/core.js` (data sync, log
 
 ## ▶️ Simple site: index.html + Express backend (`npm start`)
 
-`index.html` is served by `server.js` (Node.js + Express). Users, sessions and listings are saved in `db.json` (created automatically).
+`index.html` is served by `server.js` (Node.js + Express). Its colocated `styles.css`, `catalog.js`, `app.js`, and files under `js/` are served as static frontend assets. The static-file routes are limited to frontend paths so server files, `.env`, and `db.json` are not exposed. Users, sessions and listings are saved in `db.json` (created automatically).
 
 ```powershell
 npm install
@@ -26,6 +26,8 @@ npm start                             # → http://localhost:3000
 ```
 
 On macOS/Linux use `export ANTHROPIC_API_KEY=sk-ant-...` instead. AI pricing (`/api/analyze`) and the chat (`/api/chat`) need the key; everything else works without it. The Next.js app below is still available with `npm run dev` / `npm run start:next`.
+
+For Render, use `npm start` as the start command and set any required environment variables in the Render dashboard. The Express server listens on Render's `PORT`; no separate frontend build is needed for the root `index.html` app. The `npm run build` script builds the separate Next.js app.
 
 ---
 

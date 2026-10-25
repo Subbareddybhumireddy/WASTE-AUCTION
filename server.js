@@ -383,13 +383,29 @@ app.get("/api/place", requireLogin, async (req, res) => {
 });
 
 // ---------------------------------------------------------------------
-// Website: only index.html is served (so db.json, .env etc. stay private)
+// Website assets: serve only the frontend files and asset directories.
+// Keeping the root directory off the public static path protects db.json,
+// .env, and the rest of the server project.
 // ---------------------------------------------------------------------
+const publicAssetFiles = new Set(["/styles.css", "/catalog.js", "/app.js"]);
+const publicAssetDirectories = /^\/(?:js|assets|images|fonts)(?:\/|$)/;
+const servePublicAssets = express.static(__dirname, {
+  dotfiles: "deny",
+  index: false,
+});
+
+app.use((req, res, next) => {
+  if (!publicAssetFiles.has(req.path) && !publicAssetDirectories.test(req.path)) {
+    return next();
+  }
+  servePublicAssets(req, res, next);
+});
+
 app.get("/", (req, res) => res.sendFile(path.join(__dirname, "index.html")));
 app.use("/api", (req, res) => res.status(404).json({ error: "Not found." }));
 
 app.listen(PORT, () => {
-  console.log(`Waste2Worth is running at http://localhost:${PORT}`);
+  console.log(`Waste2Worth is listening on port ${PORT}`);
   if (!process.env.ANTHROPIC_API_KEY) {
     console.log("Note: ANTHROPIC_API_KEY is not set, so AI pricing and chat will not work until you add it.");
   }
