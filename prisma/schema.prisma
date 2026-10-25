@@ -1,0 +1,221 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String    @id @default(cuid())
+  name             String
+  email            String?   @unique
+  phone            String?   @unique
+  passwordHash     String?
+  role             String    @default("BUYER") // "SELLER" | "BUYER" | "ADMIN"
+  isPhoneVerified  Boolean   @default(false)
+  isEmailVerified  Boolean   @default(false)
+  avatarUrl        String?
+  stripeAccountId  String?
+  address          String?
+  city             String?
+  pincode          String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  // Relationships
+  sellerListings   Listing[]       @relation("SellerListings")
+  buyerBids        Bid[]           @relation("BuyerBids")
+  sellerOrders     Order[]         @relation("SellerOrders")
+  buyerOrders      Order[]         @relation("BuyerOrders")
+  reviewsGiven     Review[]        @relation("Reviewer")
+  reviewsReceived  Review[]        @relation("Reviewee")
+  reportsFiled     Report[]        @relation("Reporter")
+  reportsReceived  Report[]        @relation("ReportedUser")
+
+  @@map("users")
+}
+
+model Category {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  slug        String      @unique
+  description String?
+  icon        String?
+  co2Factor   Float       @default(1.8)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  listings    Listing[]
+  scrapRates  ScrapRate[]
+
+  @@map("categories")
+}
+
+model ScrapRate {
+  id          String   @id @default(cuid())
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  itemName    String
+  unit        String   @default("kg")
+  minRate     Float
+  maxRate     Float
+  currentRate Float
+  priceChange Float?   @default(0.0)
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+
+  @@map("scrap_rates")
+}
+
+model Listing {
+  id            String         @id @default(cuid())
+  sellerId      String
+  seller        User           @relation("SellerListings", fields: [sellerId], references: [id], onDelete: Cascade)
+  categoryId    String
+  category      Category       @relation(fields: [categoryId], references: [id])
+  title         String
+  description   String
+  quantity      Float
+  unit          String         @default("kg")
+  expectedPrice Float?
+  condition     String?        @default("Standard Scrap")
+  saleType      String         @default("FIXED")
+  reservePrice  Float?
+  endsAt        DateTime?
+  hazardousFlag Boolean        @default(false)
+  aiAnalysis    String?
+  location      String
+  pickupAddress String?
+  pickupSlot    String?
+  latitude      Float?
+  longitude     Float?
+  pincode       String?
+  status        String         @default("ACTIVE") // "ACTIVE", "BIDDING", "SOLD", "CANCELLED"
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  images        ListingImage[]
+  bids          Bid[]
+  orders        Order[]
+  reports       Report[]
+
+  @@map("listings")
+}
+
+model ListingImage {
+  id        String   @id @default(cuid())
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  imageUrl  String
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("listing_images")
+}
+
+model Bid {
+  id        String   @id @default(cuid())
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  buyerId   String
+  buyer     User     @relation("BuyerBids", fields: [buyerId], references: [id], onDelete: Cascade)
+  bidAmount Float
+  note      String?
+  status    String   @default("PENDING") // "PENDING", "ACCEPTED", "REJECTED", "WITHDRAWN"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders    Order[]
+
+  @@map("bids")
+}
+
+model Order {
+  id            String    @id @default(cuid())
+  listingId     String
+  listing       Listing   @relation(fields: [listingId], references: [id])
+  bidId         String?
+  bid           Bid?      @relation(fields: [bidId], references: [id])
+  buyerId       String
+  buyer         User      @relation("BuyerOrders", fields: [buyerId], references: [id])
+  sellerId      String
+  seller        User      @relation("SellerOrders", fields: [sellerId], references: [id])
+  totalAmount   Float
+  platformFee   Float          @default(0)
+  escrowStatus  String         @default("PENDING")
+  paymentReference String?
+  pickupConfirmedAt DateTime?
+  completedAt   DateTime?
+  status        String    @default("CONFIRMED") // "PENDING", "CONFIRMED", "PICKUP_SCHEDULED", "COMPLETED", "CANCELLED"
+  paymentStatus String    @default("PENDING") // "PENDING", "PAID", "REFUNDED"
+  pickupAddress String?
+  pickupDate    DateTime?
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  reviews       Review[]
+
+  @@map("orders")
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  reviewerId String
+  reviewer   User     @relation("Reviewer", fields: [reviewerId], references: [id])
+  revieweeId String
+  reviewee   User     @relation("Reviewee", fields: [revieweeId], references: [id])
+  rating     Int      // 1 to 5
+  comment    String?
+  createdAt  DateTime @default(now())
+
+  @@map("reviews")
+}
+
+model Report {
+  id             String   @id @default(cuid())
+  reporterId     String
+  reporter       User     @relation("Reporter", fields: [reporterId], references: [id])
+  reportedUserId String?
+  reportedUser   User?    @relation("ReportedUser", fields: [reportedUserId], references: [id])
+  listingId      String?
+  listing        Listing? @relation(fields: [listingId], references: [id])
+  reason         String
+  details        String?
+  status         String   @default("OPEN") // "OPEN", "INVESTIGATING", "RESOLVED", "DISMISSED"
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("reports")
+}
+
+model OtpVerification {
+  id        String   @id @default(cuid())
+  phone     String
+  code      String
+  purpose   String   @default("SIGNUP") // "SIGNUP", "LOGIN", "RESET_PASSWORD"
+  expiresAt DateTime
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([phone, purpose])
+  @@map("otp_verifications")
+}
+
+model ChatQuestion {
+  id          String    @id @default(cuid())
+  question    String
+  status      String    @default("UNANSWERED")
+  createdAt   DateTime  @default(now())
+  resolvedAt  DateTime?
+
+  @@index([status, createdAt])
+  @@map("chat_questions")
+}

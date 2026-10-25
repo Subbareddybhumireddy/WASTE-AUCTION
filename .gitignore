@@ -1,0 +1,13 @@
+node_modules/
+.next/
+out/
+dist/
+coverage/
+*.tsbuildinfo
+.env*
+!.env.example
+.vercel/
+db.json
+prisma/*.db
+prisma/*.db-journal
+npm-debug.log*

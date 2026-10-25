@@ -1,0 +1,472 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Waste2Worth</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+:root{--g:#166534;--g2:#15803D;--l:#DCFCE7;--l2:#EEF7EA;--a:#B45309;--bg:#F4F8F1;--ink:#10231A;--m:#5B7264;--b:#DCE8D8;--sh:0 1px 2px #10231a0d,0 8px 24px #10231a0f}
+*{box-sizing:border-box}body{margin:0;font-family:Manrope,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer}[hidden]{display:none!important}a{color:var(--g)}
+h1,h2,h3{letter-spacing:-.02em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 22px;border-radius:999px;border:2px solid var(--g);background:var(--g);color:#fff;font-weight:700;transition:.15s}
+.btn:hover{background:var(--g2);border-color:var(--g2)}.btn.o{background:#fff;color:var(--g)}.btn.o:hover{background:var(--l2)}.btn:disabled{opacity:.5;cursor:default}.btn.sm{min-height:36px;padding:0 14px;font-size:14px}
+input,select{width:100%;min-height:46px;padding:0 14px;border:1px solid #C4D8BF;border-radius:12px;background:#fff;margin:6px 0 14px;outline:none}input:focus,select:focus{border-color:var(--g);box-shadow:0 0 0 3px #16653422}
+label{font-size:13px;font-weight:700;color:var(--m)}
+.card{background:#fff;border:1px solid var(--b);border-radius:18px;padding:18px}
+.muted{color:var(--m);font-size:14px}.price{font-weight:800;color:var(--a)}.err{color:#B91C1C;font-size:14px;min-height:20px}
+.empty{text-align:center;padding:48px 16px;color:var(--m);grid-column:1/-1}
+/* auth */
+#auth{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
+#auth .art{background:linear-gradient(150deg,#166534,#0F3D22);color:#fff;padding:48px;display:flex;flex-direction:column;justify-content:space-between}
+#auth .art h1{font-size:44px;line-height:1.1;margin:0 0 12px}#auth .art p{opacity:.85;max-width:380px;line-height:1.6}
+#auth .side{display:grid;place-items:center;padding:24px}#auth .card{width:100%;max-width:400px;padding:30px;box-shadow:var(--sh)}
+@media(max-width:800px){#auth{grid-template-columns:1fr}#auth .art{padding:28px}#auth .art h1{font-size:30px}}
+/* header */
+header{position:sticky;top:0;z-index:15;display:flex;align-items:center;gap:20px;padding:12px 28px;background:#ffffffe6;backdrop-filter:blur(8px);border-bottom:1px solid var(--b)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:var(--g);text-decoration:none}.logo i{width:34px;height:34px;border-radius:10px;background:var(--g);color:#fff;display:grid;place-items:center;font-style:normal}
+.logo small{display:block;font-size:11px;color:var(--m);font-weight:600}
+nav{display:flex;gap:4px;flex:1}nav a{padding:8px 14px;border-radius:999px;font-weight:600;font-size:14px;color:var(--m);text-decoration:none}nav a:hover{background:var(--l2)}nav a.on{background:var(--l);color:var(--g)}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--l);color:var(--g);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;white-space:nowrap}
+.av{width:36px;height:36px;border-radius:50%;background:var(--l);color:var(--g);font-weight:800;display:grid;place-items:center;border:0}
+.menu{position:relative}.menu .dd{position:absolute;right:0;top:44px;width:200px;padding:8px}.dd button{width:100%;text-align:left;background:none;border:0;padding:10px;border-radius:10px}.dd button:hover{background:var(--l2)}
+@media(max-width:820px){header{flex-wrap:wrap;padding:10px 16px;gap:10px}nav{order:3;flex-basis:100%;overflow-x:auto}#loc{display:none}}
+main{max-width:1160px;margin:auto;padding:28px 28px 120px}@media(max-width:600px){main{padding:20px 16px 120px}}
+.page{animation:in .25s ease}@keyframes in{from{opacity:0;transform:translateY(6px)}}
+/* home */
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center;padding:12px 0 28px}
+.hero h1{font-size:clamp(34px,5vw,56px);line-height:1.05;margin:0 0 14px}.hero h1 em{font-style:normal;color:var(--g)}
+.hero p{color:var(--m);font-size:17px;line-height:1.6;max-width:480px;margin:0 0 22px}
+.est{display:flex;gap:16px;align-items:center;box-shadow:var(--sh);transform:rotate(-1.5deg)}.est .ph{width:110px;height:110px;flex:none;border-radius:14px}
+.tag{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--g)}
+@media(max-width:800px){.hero{grid-template-columns:1fr}.est{transform:none}}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:36px}.stats .card b{display:block;font-size:26px;font-weight:800}
+@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}}
+.sec{display:flex;justify-content:space-between;align-items:end;margin:0 0 16px;gap:12px}.sec h2{margin:0;font-size:24px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px}.steps .n{width:32px;height:32px;border-radius:50%;background:var(--l);color:var(--g);font-weight:800;display:grid;place-items:center;margin-bottom:10px}
+@media(max-width:700px){.steps{grid-template-columns:1fr}}
+/* listings */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+.item{padding:0;overflow:hidden;transition:.18s;cursor:pointer;display:flex;flex-direction:column}.item:hover{transform:translateY(-3px);box-shadow:var(--sh)}
+.ph{position:relative;height:170px;display:grid;place-items:center;font-size:54px;background:var(--l2)}.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.c-metal{background:linear-gradient(135deg,#E5ECEF,#CBD8DE)}.c-plastic{background:linear-gradient(135deg,#E0F2FE,#BAE6FD)}.c-paper{background:linear-gradient(135deg,#FEF3C7,#FDE2A7)}.c-ewaste{background:linear-gradient(135deg,#EDE9FE,#DDD6FE)}.c-glass{background:linear-gradient(135deg,#DCFCE7,#BBF7D0)}.c-other{background:linear-gradient(135deg,#F1F5F0,#DCE8D8)}
+.badge{position:absolute;left:12px;top:12px;background:#fff;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;box-shadow:0 1px 4px #0002}.badge.live{color:#B91C1C}.badge.live:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#DC2626;margin-right:6px;animation:pulse 1.4s infinite}
+.badge.sold{background:var(--ink);color:#fff}@keyframes pulse{50%{opacity:.3}}
+.item .bd{padding:14px 16px 16px;display:flex;flex-direction:column;gap:4px;flex:1}.item h3{margin:0;font-size:16px}
+.item .ft{display:flex;justify-content:space-between;align-items:end;margin-top:auto;padding-top:8px}.item .price{font-size:21px}.item .ft small{font-size:12px;color:var(--m);font-weight:600;text-align:right}
+/* market controls */
+.search{position:relative}.search input{padding-left:44px;min-height:52px;border-radius:999px;font-size:15px;margin:0 0 14px;box-shadow:var(--sh);border-color:transparent}.search span{position:absolute;left:18px;top:15px;color:var(--m)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px;scrollbar-width:none}
+.chip{flex:none;border:1px solid var(--b);background:#fff;border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;white-space:nowrap}.chip:hover{border-color:var(--g)}
+.chip.cat{background:var(--l);border-color:var(--l);color:var(--g)}.chip.on{background:var(--g);border-color:var(--g);color:#fff}
+.count{font-size:14px;color:var(--m);margin:14px 0}
+/* sell */
+.sell{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}@media(max-width:820px){.sell{grid-template-columns:1fr}}
+.drop{border:2px dashed #A7C9A0;border-radius:18px;background:var(--l2);min-height:320px;display:grid;place-items:center;text-align:center;padding:24px;cursor:pointer;position:relative;overflow:hidden;transition:.15s}
+.drop:hover,.drop.over{border-color:var(--g);background:var(--l)}.drop img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.drop .big{font-size:48px}.drop .chg{position:absolute;right:12px;bottom:12px}
+.ai{background:var(--l2);border-color:#C9E3C2}.ai h3{margin:4px 0 8px;font-size:20px}.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14px}.kv dt{color:var(--m)}.kv dd{margin:0;font-weight:600}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 16px}.seg button{min-height:44px;border-radius:12px;border:2px solid var(--b);background:#fff;font-weight:700}.seg button.on{border-color:var(--g);background:var(--g);color:#fff}
+.total{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border:1px solid var(--b);border-radius:14px;margin:6px 0 16px}.total .price{font-size:26px}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid #fff6;border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.shimmer{height:14px;border-radius:7px;background:linear-gradient(90deg,#E3EEE0,#F4F8F1,#E3EEE0);background-size:200%;animation:sh 1.2s infinite;margin:8px 0}@keyframes sh{to{background-position:-200% 0}}
+.warn{background:#FEF2F2;border-color:#FECACA}
+/* modal */
+.ov{position:fixed;inset:0;background:#0b1a1199;display:grid;place-items:center;z-index:40;padding:16px;animation:in .2s}
+.ov>.card{width:100%;max-width:440px;max-height:90vh;overflow:auto;padding:0}.ov .ph{height:240px;font-size:80px}
+.x{position:absolute;right:12px;top:12px;width:34px;height:34px;border-radius:50%;border:0;background:#fff;font-size:18px;z-index:2}
+/* chat */
+#fab{position:fixed;right:22px;bottom:22px;z-index:30;height:56px;padding:0 22px;border-radius:999px;border:0;background:var(--g);color:#fff;font-weight:800;box-shadow:0 8px 24px #16653455;display:flex;align-items:center;gap:8px}
+#chat{position:fixed;right:22px;bottom:90px;width:min(380px,calc(100vw - 32px));height:min(560px,calc(100vh - 120px));z-index:30;display:flex;flex-direction:column;padding:0;overflow:hidden;box-shadow:0 20px 50px #10231a33;animation:in .2s}
+@media(max-width:600px){#chat{right:16px}#fab{right:16px;bottom:16px}}
+#chat .hd{padding:14px 18px;background:var(--g);color:#fff;display:flex;justify-content:space-between;align-items:center}#chat .hd b{display:block}#chat .hd small{opacity:.8;font-size:12px}#chat .hd button{background:none;border:0;color:#fff;font-size:22px}
+#msgs{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px;background:#FAFCF9}
+.m{padding:10px 13px;border-radius:16px;max-width:86%;white-space:pre-wrap;font-size:14px;line-height:1.5}.u{align-self:flex-end;background:var(--g);color:#fff;border-bottom-right-radius:4px}.b{align-self:flex-start;background:#fff;border:1px solid var(--b);border-bottom-left-radius:4px}
+.mini{align-self:flex-start;display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--b);border-radius:12px;padding:8px 12px 8px 8px;cursor:pointer;font-size:13px;max-width:86%}.mini i{width:38px;height:38px;border-radius:8px;display:grid;place-items:center;font-style:normal;font-size:20px;flex:none;overflow:hidden}.mini i img{width:100%;height:100%;object-fit:cover}
+#sugg{display:flex;gap:6px;padding:8px 12px 0;overflow-x:auto;scrollbar-width:none}#sugg button{flex:none;border:1px solid var(--b);background:var(--l2);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600}
+#cf{display:flex;gap:8px;padding:10px 12px 12px}#cf input{margin:0;border-radius:999px}#cf .btn{padding:0 18px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 20px;border-radius:999px;font-weight:600;z-index:50;animation:in .2s}
+/* buy waste */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+button:focus-visible,a:focus-visible{outline:3px solid #0F3D22;outline-offset:2px}
+.btools{display:grid;grid-template-columns:1fr 190px 210px;gap:10px;align-items:center}.btools input,.btools select{margin:0;min-height:52px;border-radius:999px}.btools select{padding:0 16px;box-shadow:var(--sh);border-color:transparent}
+@media(max-width:700px){.btools{grid-template-columns:1fr 1fr}.btools .search{grid-column:1/-1}}
+.bcard{padding:0;overflow:hidden;display:flex;flex-direction:column}.bcard .ph{height:120px}.bcard .bd{padding:14px 16px 16px;display:flex;flex-direction:column;gap:4px;flex:1}.bcard h3{margin:0;font-size:16px}
+.bcard .ft{display:flex;justify-content:space-between;align-items:end;margin-top:auto;padding-top:8px}.bcard .price{font-size:20px}.bcard .ft small{font-size:12px;color:var(--m);font-weight:700}
+.buyf{display:flex;gap:8px;margin-top:10px}.buyf input{margin:0;min-height:40px;flex:1;min-width:0}.buyf .btn{flex:none}.bcard .err{min-height:0;margin-top:4px}
+.bcharts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:32px}@media(max-width:820px){.bcharts{grid-template-columns:1fr}}
+.bcharts h3{margin:0 0 4px;font-size:18px}.phd{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.pie{position:relative;height:230px;margin:12px 0}
+.lg{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:14px}.lg li{display:flex;align-items:center;gap:8px}.lg i{width:12px;height:12px;border-radius:4px;flex:none}.lg span{flex:1}
+.lg em{font-style:normal;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px}.lg .hi{background:var(--l);color:var(--g)}.lg .lo{background:#F1F5F0;color:var(--m)}
+.seg.sm{margin:0;grid-template-columns:auto auto}.seg.sm button{min-height:36px;padding:0 12px;font-size:13px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--b);white-space:nowrap}th{font-size:12px;color:var(--m);text-transform:uppercase;letter-spacing:.04em}th.num,td.num{text-align:right}
+</style></head><body>
+
+<!-- ============ LOGIN ============ -->
+<section id="auth">
+ <div class="art"><a class="logo" style="color:#fff"><i>♻</i>Waste2Worth</a>
+  <div><h1>Turn your waste<br>into worth.</h1><p>Snap a photo of your scrap, get an instant AI price, and sell it to buyers near you — by auction or at a fixed price.</p></div>
+  <p class="muted" style="color:#fff;opacity:.7">Metal · Plastic · Paper · E-waste · Glass</p></div>
+ <div class="side"><div class="card"><h2 style="margin:0 0 4px" id="ah">Welcome back</h2><p class="muted" id="sub" style="margin:0 0 18px">Log in to sell or buy waste.</p>
+ <form id="af"><div id="nm" hidden><label for="n">Your name</label><input id="n" autocomplete="name"></div>
+ <label for="e">Email</label><input id="e" type="email" autocomplete="email" required>
+ <label for="p">Password</label><input id="p" type="password" autocomplete="current-password" minlength="6" required>
+ <div id="rl" hidden><label>I mainly want to</label><div class="seg" id="rseg"><button type="button" data-v="sell" class="on">Sell waste</button><button type="button" data-v="buy">Buy waste</button></div></div>
+ <div class="err" id="er" role="alert"></div><button class="btn" style="width:100%" id="go">Log in</button></form>
+ <p class="muted" style="text-align:center;margin-bottom:0">New here? <a href="#" id="sw" style="font-weight:800">Create an account</a></p></div></div>
+</section>
+
+<!-- ============ APP ============ -->
+<div id="app" hidden>
+<header>
+ <a class="logo" href="#home"><i>♻</i><span>Waste2Worth<small>Turn your waste into worth</small></span></a>
+ <nav id="nav"><a href="#home" data-p="home">Home</a><a href="#market" data-p="market">Marketplace</a><a href="#buy" data-p="buy">Buy waste</a><a href="#sell" data-p="sell">Sell waste</a><a href="#mine" data-p="mine">My listings</a></nav>
+ <span class="pill" id="loc">📍 Locating…</span>
+ <a class="btn sm" href="#sell">+ Sell scrap</a>
+ <div class="menu"><button class="av" id="avb" aria-label="Account"></button>
+  <div class="card dd" id="dd" hidden><div style="padding:8px 10px"><b id="who"></b><div class="muted" id="wmail" style="font-size:12px"></div></div><button id="out">Log out</button></div></div>
+</header>
+<main>
+
+<!-- HOME -->
+<section id="home" class="page" hidden>
+ <div class="hero"><div><span class="tag">AI-powered scrap marketplace</span><h1>Turn your waste<br>into <em>worth</em></h1>
+  <p>Snap a photo, get an AI price estimate in seconds, and let nearby buyers bid on it.</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="#sell">📷 Snap and sell</a><a class="btn o" href="#market">Browse auctions</a></div></div>
+  <div class="card est" id="heroEst"></div></div>
+ <div class="stats" id="stats"></div>
+ <div class="sec"><div><h2>Near you</h2><div class="muted" id="nearSub">Fresh listings from local sellers</div></div><a href="#market" style="font-weight:700;text-decoration:none">View all →</a></div>
+ <div class="grid" id="near"></div>
+ <div class="steps">
+  <div class="card"><div class="n">1</div><b>Snap a photo</b><p class="muted">Take a picture of your scrap — cans, bottles, cardboard, old electronics.</p></div>
+  <div class="card"><div class="n">2</div><b>Get an AI price</b><p class="muted">Our AI names the material, checks if it is safe to sell and suggests a fair rate.</p></div>
+  <div class="card"><div class="n">3</div><b>Sell nearby</b><p class="muted">List it as an auction or fixed price and buyers in your area can find it.</p></div></div>
+</section>
+
+<!-- MARKETPLACE -->
+<section id="market" class="page" hidden>
+ <div class="sec"><div><h2>Materials near you</h2><div class="muted">Find your next deal from local sellers</div></div><span class="pill" id="loc2">📍 Your city</span></div>
+ <div class="search"><span>🔍</span><input id="q" placeholder="Search copper, plastic, e-waste…" aria-label="Search listings"></div>
+ <div class="chips" id="cats"></div>
+ <div class="chips" id="filters"></div>
+ <div class="count" id="count"></div>
+ <div class="grid" id="mgrid"></div>
+</section>
+
+<!-- BUY WASTE -->
+<section id="buy" class="page" hidden>
+ <div class="sec"><div><h2>Buy waste</h2><div class="muted">Buy recyclable scrap by the kilo from local sellers</div></div><span class="pill" id="loc4">📍 Your city</span></div>
+ <div class="btools">
+  <div class="search"><span aria-hidden="true">🔍</span><input id="bq" type="search" placeholder="Search plastic, iron, seller, city…" aria-label="Search waste to buy"></div>
+  <label class="sr" for="btype">Waste type</label><select id="btype"><option value="All">All types</option><option>Plastic</option><option>Paper</option><option>Iron</option><option>Metal</option><option>Cardboard</option><option>Glass</option><option>E-waste</option><option>Cloth</option></select>
+  <label class="sr" for="bsort">Sort by</label><select id="bsort"><option value="demand">Most in demand</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="stock">Most stock</option></select>
+ </div>
+ <div class="count" id="bcount"></div>
+ <div class="grid" id="bgrid"></div>
+ <div class="bcharts">
+  <div class="card"><h3>Demand by waste type</h3><p class="muted" style="margin:0">What buyers want this month, in kg. It grows every time someone buys.</p>
+   <div class="pie"><canvas id="dchart" role="img" aria-label="Pie chart of demand by waste type. The list below has the same numbers."></canvas></div><ul class="lg" id="dlegend"></ul></div>
+  <div class="card"><div class="phd"><h3>My purchases</h3><div class="seg sm" id="pseg" hidden><button type="button" data-v="kg" class="on">By weight (kg)</button><button type="button" data-v="spend">By spend (₹)</button></div></div>
+   <div class="empty" id="pempty"><div style="font-size:40px">🛒</div><p>You have not bought anything yet</p></div>
+   <div id="pwrap" hidden><div class="pie"><canvas id="pchart" role="img" aria-label="Pie chart of what you have bought. The list below has the same numbers."></canvas></div><ul class="lg" id="plegend"></ul></div></div>
+ </div>
+ <p class="muted" id="nochart" hidden>Charts could not load. Check your internet connection. The numbers are still listed above.</p>
+ <div class="card" style="margin-top:18px"><div class="phd" style="margin-bottom:8px"><h3 style="margin:0">Purchase history</h3><span class="muted" id="bspent"></span></div>
+  <div class="tw"><table><thead><tr><th>Date</th><th>Item</th><th>Type</th><th class="num">Qty</th><th class="num">Total</th></tr></thead><tbody id="bhist"></tbody></table></div></div>
+</section>
+
+<!-- SELL -->
+<section id="sell" class="page" hidden>
+ <div class="sec"><div><h2>Sell your waste</h2><div class="muted">Photo → AI price → listed in under a minute</div></div><span class="pill" id="loc3">📍 Your city</span></div>
+ <div class="sell">
+  <div><input id="ph" type="file" accept="image/*" hidden>
+   <div class="drop" id="drop"><div><div class="big">📷</div><b>Photo of your waste</b><p class="muted">Tap to take a photo or upload from gallery<br>or drag an image here</p></div></div>
+   <div style="display:flex;gap:10px;margin-top:12px"><button class="btn o sm" id="cam">📷 Camera</button><button class="btn o sm" id="gal">🖼 Gallery</button></div></div>
+  <div>
+   <div class="card ai" id="res"><span class="tag">AI analysis</span><h3>Waiting for a photo</h3><p class="muted" style="margin:0">Add a photo and our AI will identify the material, check it is safe to sell and suggest a price per kg.</p></div>
+   <div class="card" id="form" style="margin-top:14px" hidden>
+    <label for="ti">Title</label><input id="ti" maxlength="80">
+    <label for="w">Weight (kg)</label><input id="w" type="number" min="0.1" step="0.1" value="10">
+    <label>Suggested total</label><div class="total"><span class="muted" id="rate"></span><span class="price" id="sug">₹0</span></div>
+    <label>Sell as</label><div class="seg" id="mseg"><button type="button" data-v="auction" class="on">🔨 Auction</button><button type="button" data-v="fixed">🏷 Fixed price</button></div>
+    <label for="pr" id="prl">Starting price (₹)</label><input id="pr" type="number" min="1">
+    <button class="btn" id="pub" style="width:100%">List it now</button></div>
+  </div></div>
+</section>
+
+<!-- MY LISTINGS -->
+<section id="mine" class="page" hidden>
+ <div class="sec"><div><h2>My listings</h2><div class="muted" id="mineSub"></div></div><a class="btn sm" href="#sell">+ New listing</a></div>
+ <div class="grid" id="mygrid"></div>
+</section>
+</main></div>
+
+<div id="ov" class="ov" hidden></div>
+<button id="fab" hidden aria-label="Open WasteBot">💬 WasteBot</button>
+<div id="chat" class="card" hidden>
+ <div class="hd"><div><b>WasteBot</b><small>Ask anything about waste</small></div><button id="cx" aria-label="Close chat">×</button></div>
+ <div id="msgs"><div class="m b">Hi! 👋 I can help you price, sort and sell scrap. Ask me anything — or try a suggestion below.</div></div>
+ <div id="sugg"><button>Plastic rates</button><button>Can I sell old newspaper?</button><button>E-waste tips</button><button>Prohibited items</button></div>
+ <form id="cf"><input id="ci" aria-label="Message" placeholder="Ask about any waste" autocomplete="off"><button class="btn">Send</button></form>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+// Use only the ANON (publishable) key here — never the service_role key.
+const SUPABASE_URL='https://elnvrseohlokdpqcgdzc.supabase.co', SUPABASE_KEY='sb_publishable_JW2jdBEoACoNNSc0BQa1HA_v6jFDeg0';
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr=n=>'₹'+Math.round(+n||0).toLocaleString('en-IN');
+const AUCTION_DAYS=3;
+let mode='login',role='sell',img='',blob=null,an=null,area='',hist=[],user=null,profile=null,all=[];
+const F={cat:'All',q:'',near:false,type:'all',sort:'new'};
+
+// ---------- categories ----------
+const CATS=[['All','✦'],['Metal','⚙️'],['Plastic','🧴'],['Paper','📦'],['E-waste','💻'],['Glass','🍾'],['Other','♻️']];
+const ICON=Object.fromEntries(CATS), CLS={Metal:'metal',Plastic:'plastic',Paper:'paper','E-waste':'ewaste',Glass:'glass',Other:'other'};
+function cat(t){t=String(t||'').toLowerCase();
+ if(/alumin|copper|brass|iron|steel|metal|tin|can\b|cans|wire/.test(t))return'Metal';
+ if(/plastic|pet|bottle|hdpe|polythene|poly/.test(t))return'Plastic';
+ if(/paper|cardboard|carton|newspaper|book|magazine/.test(t))return'Paper';
+ if(/e-waste|electronic|laptop|phone|computer|circuit|cable|charger|tv|monitor/.test(t))return'E-waste';
+ if(/glass|jar/.test(t))return'Glass';return'Other'}
+
+// ---------- auth ----------
+$('#sw').onclick=e=>{e.preventDefault();mode=mode=='login'?'signup':'login';const s=mode=='signup';$('#nm').hidden=$('#rl').hidden=!s;
+ $('#go').textContent=s?'Create account':'Log in';$('#sw').textContent=s?'I already have an account':'Create an account';
+ $('#ah').textContent=s?'Create your account':'Welcome back';$('#sub').textContent=s?'Takes less than a minute.':'Log in to sell or buy waste.';$('#er').textContent=''};
+seg('#rseg',v=>role=v);
+$('#af').onsubmit=async e=>{e.preventDefault();$('#er').textContent='';const email=$('#e').value.trim(),password=$('#p').value,go=$('#go');go.disabled=true;
+ try{if(mode=='signup'){const {data,error}=await db.auth.signUp({email,password});if(error)return $('#er').textContent=error.message;
+   if(!data.session)return $('#er').textContent='Check your email to confirm, or turn off "Confirm email" in Supabase.';
+   const name=$('#n').value.trim()||email.split('@')[0];await db.from('profiles').insert({id:data.user.id,name,role});start(data.user,{name,role},true)}
+  else{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)return $('#er').textContent='Wrong email or password.';enter(data.user)}}
+ finally{go.disabled=false}};
+async function enter(u){const {data}=await db.from('profiles').select('*').eq('id',u.id).maybeSingle();start(u,data||{name:u.email.split('@')[0],role:'sell'},false)}
+function start(u,p,fresh){user=u;profile=p;$('#auth').hidden=true;$('#app').hidden=$('#fab').hidden=false;
+ $('#who').textContent=p.name;$('#wmail').textContent=u.email;$('#avb').textContent=(p.name||'?')[0].toUpperCase();
+ toast((fresh?'Welcome, ':'Welcome back, ')+p.name+'! 👋');locate();
+ if(!location.hash)location.hash=p.role=='buy'?'#market':'#home';else route();refresh()}
+$('#avb').onclick=e=>{e.stopPropagation();$('#dd').hidden=!$('#dd').hidden};document.addEventListener('click',()=>$('#dd').hidden=true);
+$('#out').onclick=async()=>{await db.auth.signOut();location.hash='';location.reload()};
+
+// ---------- routing ----------
+const PAGES=['home','market','buy','sell','mine'];
+function route(){if(!user)return;const p=PAGES.includes(location.hash.slice(1))?location.hash.slice(1):'home';
+ $$('.page').forEach(x=>x.hidden=x.id!=p);$$('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.p==p));scrollTo(0,0);render()}
+addEventListener('hashchange',route);
+
+// ---------- data ----------
+async function refresh(){const {data,error}=await db.from('listings').select('*').order('created_at',{ascending:false}).limit(500);
+ if(error){toast(error.message);all=[]}else all=(data||[]).map(x=>({...x,cat:cat(x.waste_type||x.title)}));render()}
+const isAuction=x=>x.sale_type=='auction', active=x=>(x.status||'active')=='active';
+const endsAt=x=>new Date(x.created_at).getTime()+AUCTION_DAYS*864e5;
+function left(x){const ms=endsAt(x)-Date.now();if(ms<=0)return'Ended';const h=Math.floor(ms/36e5),m=Math.floor(ms%36e5/6e4);return h>=24?`Ends in ${Math.floor(h/24)}d ${h%24}h`:`Ends in ${h}h ${m}m`}
+function ago(d){const s=(Date.now()-new Date(d))/1e3;return s<60?'just now':s<3600?Math.floor(s/60)+' min ago':s<86400?Math.floor(s/3600)+' h ago':Math.floor(s/86400)+' d ago'}
+const city=a=>String(a||'').split(',').pop().trim().toLowerCase();
+const nearMe=x=>area&&x.area&&(city(x.area)==city(area)||x.area==area);
+
+function render(){if(!user)return;const p=location.hash.slice(1)||'home';
+ if(p=='home')renderHome();if(p=='market')renderMarket();if(p=='buy')renderBuy();if(p=='mine')renderMine()}
+
+function card(x,mine){const sold=!active(x),auc=isAuction(x);
+ return `<article class="card item" data-id="${esc(x.id)}" tabindex="0"><div class="ph c-${CLS[x.cat]}">${x.photo_url?`<img src="${esc(x.photo_url)}" alt="${esc(x.title)}" loading="lazy">`:ICON[x.cat]}
+ <span class="badge ${sold?'sold':auc?'live':''}">${sold?'Sold':auc?'Live auction':'Buy now'}</span></div>
+ <div class="bd"><h3>${esc(x.title)}</h3><div class="muted">${esc(x.cat)} · ${esc(+x.weight_kg)} kg</div>
+ <div class="ft"><span class="price">${inr(x.price)}</span><small>${sold?ago(x.created_at):auc?left(x):x.area?'📍 '+esc(x.area.split(',')[0]):ago(x.created_at)}</small></div></div></article>`}
+
+function renderHome(){const act=all.filter(active),sold=all.filter(x=>!active(x)),kg=all.reduce((s,x)=>s+(+x.weight_kg||0),0),
+ paid=sold.reduce((s,x)=>s+(+x.price||0),0)||act.reduce((s,x)=>s+(+x.price||0),0),live=act.filter(x=>isAuction(x)&&endsAt(x)>Date.now()).length;
+ $('#stats').innerHTML=[[all.length.toLocaleString('en-IN'),'Products given a second life'],[Math.round(kg).toLocaleString('en-IN')+' kg','Materials recycled'],[inr(paid),sold.length?'Paid to local sellers':'Value listed'],[live,'Live auctions']]
+  .map(([v,l])=>`<div class="card"><b>${v}</b><span class="muted">${l}</span></div>`).join('');
+ const n=act.filter(nearMe),list=(n.length?n:act).slice(0,4);$('#nearSub').textContent=n.length?'Listings in '+area.split(',').pop().trim():'Fresh listings from local sellers';
+ $('#near').innerHTML=list.length?list.map(x=>card(x)).join(''):'<div class="card empty">No listings yet — <a href="#sell">be the first to sell</a>.</div>';
+ const e=an&&!an.hazardous?an:act.find(x=>x.photo_url)||null;
+ $('#heroEst').innerHTML=an&&!an.hazardous?`<div class="ph c-${CLS[cat(an.waste_type)]}">${img?`<img src="${img}" alt="">`:ICON[cat(an.waste_type)]}</div><div><span class="tag">Your last AI estimate</span><h3 style="margin:4px 0">${esc(an.waste_type)}</h3><div class="muted">Condition: ${esc(an.condition)}</div><div class="price" style="font-size:22px">${inr(an.price_per_kg_min)}–${inr(an.price_per_kg_max)} / kg</div></div>`
+  :e?`<div class="ph c-${CLS[e.cat]}"><img src="${esc(e.photo_url)}" alt=""></div><div><span class="tag">Just listed</span><h3 style="margin:4px 0">${esc(e.title)}</h3><div class="muted">${esc(+e.weight_kg)} kg · ${isAuction(e)?'Auction':'Buy now'}</div><div class="price" style="font-size:22px">${inr(e.price)}</div></div>`
+  :`<div class="ph c-plastic">🧴</div><div><span class="tag">AI estimate</span><h3 style="margin:4px 0">Mixed plastic</h3><div class="muted">Snap a photo to get yours</div><div class="price" style="font-size:22px">₹…/kg</div></div>`}
+
+function renderMarket(){
+ $('#cats').innerHTML=CATS.map(([c,i])=>`<button class="chip cat ${F.cat==c?'on':''}" data-c="${c}">${i} ${c=='All'?'All materials':c}</button>`).join('');
+ $('#filters').innerHTML=[['near','📍 Near me',F.near],['auction','🔨 Auction',F.type=='auction'],['fixed','🏷 Buy now',F.type=='fixed'],['new','🕒 Newest',F.sort=='new'],['low','₹ Price: low',F.sort=='low'],['ending','⏳ Ending soon',F.sort=='ending']]
+  .map(([k,l,on])=>`<button class="chip ${on?'on':''}" data-f="${k}">${l}</button>`).join('');
+ const q=F.q.toLowerCase();let l=all.filter(x=>active(x)&&(F.cat=='All'||x.cat==F.cat)&&(F.type=='all'||x.sale_type==F.type)&&(!F.near||nearMe(x))
+  &&(!q||[x.title,x.waste_type,x.area,x.cat].join(' ').toLowerCase().includes(q)));
+ if(F.sort=='low')l.sort((a,b)=>a.price-b.price);if(F.sort=='ending')l=l.filter(isAuction).sort((a,b)=>endsAt(a)-endsAt(b));
+ $('#count').textContent=`${l.length} listing${l.length==1?'':'s'}${F.cat!='All'?' in '+F.cat:''}${F.near&&area?' near '+area:''}`;
+ $('#mgrid').innerHTML=l.length?l.map(x=>card(x)).join(''):`<div class="card empty">${F.near&&!area?'Allow location access to see listings near you.':'Nothing matches those filters. Try another search or category.'}</div>`}
+$('#cats').onclick=e=>{const b=e.target.closest('[data-c]');if(b){F.cat=b.dataset.c;renderMarket()}};
+$('#filters').onclick=e=>{const k=e.target.closest('[data-f]')?.dataset.f;if(!k)return;
+ if(k=='near')F.near=!F.near;else if(k=='auction'||k=='fixed')F.type=F.type==k?'all':k;else F.sort=k;renderMarket()};
+$('#q').oninput=e=>{F.q=e.target.value;renderMarket()};
+
+function renderMine(){const l=all.filter(x=>x.seller_id==user.id),a=l.filter(active);
+ $('#mineSub').textContent=l.length?`${a.length} active · ${l.length-a.length} sold · ${inr(a.reduce((s,x)=>s+(+x.price||0),0))} listed`:'';
+ $('#mygrid').innerHTML=l.length?l.map(x=>card(x,true)).join(''):'<div class="card empty"><div style="font-size:40px">📷</div><p>You have not listed anything yet.</p><a class="btn" href="#sell">Sell your first item</a></div>'}
+
+// ---------- buy waste ----------
+const BTYPES=['Plastic','Paper','Iron','Metal','Cardboard','Glass','E-waste','Cloth'];
+const BICON={Plastic:'🧴',Paper:'📰',Iron:'🔩',Metal:'⚙️',Cardboard:'📦',Glass:'🍾','E-waste':'💻',Cloth:'👕',Other:'♻️'};
+const BCLS={Plastic:'plastic',Paper:'paper',Iron:'metal',Metal:'metal',Cardboard:'paper',Glass:'glass','E-waste':'ewaste',Cloth:'other',Other:'other'};
+const BCOL={Plastic:'#2a78d6',Cardboard:'#eb6834',Glass:'#1baf7a',Paper:'#eda100','E-waste':'#e87ba4',Cloth:'#008300',Metal:'#6250d6',Iron:'#e34948',Other:'#8a8a85'}; // fixed per type, never by rank
+const SAMPLE_LISTINGS=[
+ {id:'s1',title:'Clean PET bottles',type:'Plastic',ppk:18,kg:120,seller:'Ravi Kumar',area:'Koramangala, Bengaluru'},
+ {id:'s2',title:'Old newspapers',type:'Paper',ppk:14,kg:80,seller:'Anita Sharma',area:'Andheri, Mumbai'},
+ {id:'s3',title:'Iron rods and sheets',type:'Iron',ppk:32,kg:250,seller:'Mohan Steel Works',area:'Peenya, Bengaluru'},
+ {id:'s4',title:'Aluminium cans',type:'Metal',ppk:105,kg:40,seller:'Fatima Shaikh',area:'Banjara Hills, Hyderabad'},
+ {id:'s5',title:'Flattened cardboard boxes',type:'Cardboard',ppk:10,kg:300,seller:'QuickMart Stores',area:'Saket, New Delhi'},
+ {id:'s6',title:'Mixed glass bottles',type:'Glass',ppk:3,kg:150,seller:'Joseph D\'Souza',area:'Panaji, Goa'},
+ {id:'s7',title:'Old laptops and chargers',type:'E-waste',ppk:85,kg:25,seller:'Priya Nair',area:'Kakkanad, Kochi'},
+ {id:'s8',title:'Cotton cloth scraps',type:'Cloth',ppk:12,kg:60,seller:'Lakshmi Tailors',area:'T. Nagar, Chennai'},
+ {id:'s9',title:'HDPE containers',type:'Plastic',ppk:24,kg:0,seller:'Green Hands NGO',area:'Kothrud, Pune'},
+ {id:'s10',title:'Copper wire offcuts',type:'Metal',ppk:620,kg:12,seller:'Arjun Electricals',area:'Salt Lake, Kolkata'}];
+const SAMPLE_DEMAND={Plastic:520,Cardboard:430,Paper:360,Metal:300,Iron:260,'E-waste':210,Glass:140,Cloth:90};
+const BF={q:'',type:'All',sort:'demand'},charts={};let pBy='kg';
+const inr2=n=>'₹'+(+n||0).toLocaleString('en-IN',{maximumFractionDigits:2});
+const fmtKg=n=>(+n||0).toLocaleString('en-IN',{maximumFractionDigits:1})+' kg';
+const pct=(v,s)=>Math.round(v/(s||1)*100)+'%';
+function lsGet(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v??d}catch{return d}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch{return false}}
+function savedLoc(){let v='';try{v=localStorage.getItem('w2w_location')||''}catch{}
+ try{const j=JSON.parse(v);if(typeof j=='string')v=j;else if(j&&typeof j=='object')v=j.area||j.city||j.name||''}catch{}return v}
+function bType(t){t=String(t||'').toLowerCase();
+ if(/cardboard|carton|corrugated/.test(t))return'Cardboard';
+ if(/e-waste|ewaste|electronic|laptop|phone|computer|circuit|charger|monitor|\btv\b/.test(t))return'E-waste';
+ if(/glass|jar/.test(t))return'Glass';
+ if(/iron|steel/.test(t))return'Iron';
+ if(/alumin|copper|brass|metal|\btin\b|\bcans?\b|wire/.test(t))return'Metal';
+ if(/plastic|\bpet\b|hdpe|bottle|polythene|poly/.test(t))return'Plastic';
+ if(/paper|newspaper|book|magazine/.test(t))return'Paper';
+ if(/cloth|textile|fabric|cotton|garment|clothes|saree/.test(t))return'Cloth';
+ return'Other'}
+const demand=()=>{const d=lsGet('w2w_demand',null);return{...SAMPLE_DEMAND,...(d&&typeof d=='object'?d:{})}};
+const myBuys=()=>{const p=lsGet('w2w_purchases',[]);return(Array.isArray(p)?p:[]).filter(x=>x&&x.buyer==user.id)};
+// the user's own listings (Supabase + localStorage "w2w_listings") are shown but cannot be bought
+function ownListings(){
+ const fromDb=all.filter(x=>x.seller_id==user.id&&active(x)).map(x=>({id:'db-'+x.id,title:x.title,type:bType(x.waste_type||x.title),ppk:(+x.price||0)/(+x.weight_kg||1),kg:+x.weight_kg||0,seller:profile?.name||'You',area:x.area||'',own:true}));
+ const ls=lsGet('w2w_listings',[]);
+ const fromLs=(Array.isArray(ls)?ls:[]).filter(x=>x&&typeof x=='object').map((x,i)=>{const kg=+(x.kg??x.weight_kg??x.weight)||0;
+  return{id:'ls-'+(x.id??i),title:x.title||x.name||'My listing',type:bType(x.type||x.category||x.waste_type||x.title||x.name),ppk:+(x.pricePerKg??x.price_per_kg??x.ppk)||(+x.price||0)/(kg||1),kg,seller:x.seller||profile?.name||'You',area:x.area||x.location||'',own:true}});
+ return[...fromDb,...fromLs]}
+
+function renderBuy(){const stock=lsGet('w2w_stock',{}),dem=demand(),q=BF.q.trim().toLowerCase(),mine=myBuys();
+ $('#loc4').textContent='📍 '+(area||savedLoc()||'Your city');
+ const S={demand:(a,b)=>(dem[b.type]||0)-(dem[a.type]||0),low:(a,b)=>a.ppk-b.ppk,high:(a,b)=>b.ppk-a.ppk,stock:(a,b)=>b.kg-a.kg};
+ const l=[...SAMPLE_LISTINGS.map(x=>({...x,kg:x.id in stock?+stock[x.id]:x.kg})),...ownListings()]
+  .filter(x=>(BF.type=='All'||x.type==BF.type)&&(!q||[x.title,x.type,x.seller,x.area].join(' ').toLowerCase().includes(q)))
+  .sort((a,b)=>(a.kg<=0)-(b.kg<=0)||S[BF.sort](a,b)); // sold out always last
+ $('#bcount').textContent=`${l.length} listing${l.length==1?'':'s'}${BF.type!='All'?' in '+BF.type:''}`;
+ $('#bgrid').innerHTML=l.length?l.map(bCard).join(''):'<div class="card empty">No waste matches that search. Try another type.</div>';
+ $('#nochart').hidden=!!window.Chart;renderDemand(dem);renderMyBuys(mine);renderHistory(mine)}
+
+function bCard(x){const out=x.kg<=0,dis=out||x.own,id=esc(x.id);
+ return `<article class="card bcard"><div class="ph c-${BCLS[x.type]}">${BICON[x.type]}${out?'<span class="badge sold">Sold out</span>':x.own?'<span class="badge">Your listing</span>':''}</div>
+ <div class="bd"><h3>${esc(x.title)}</h3><div class="muted">${BICON[x.type]} ${esc(x.type)} · ${esc(x.seller)}</div>${x.area?`<div class="muted">📍 ${esc(x.area)}</div>`:''}
+ <div class="ft"><span class="price">${inr2(x.ppk)}<span class="muted" style="font-weight:600"> / kg</span></span><small>${out?'0 kg left':fmtKg(x.kg)+' available'}</small></div>
+ <form class="buyf" data-id="${id}" novalidate><label class="sr" for="bq-${id}">Quantity in kg for ${esc(x.title)}</label>
+ <input id="bq-${id}" type="number" inputmode="decimal" min="0.1" step="0.1"${out?'':` max="${x.kg}"`} placeholder="kg"${dis?' disabled':''}>
+ <button class="btn sm"${dis?' disabled':''}>${out?'Sold out':x.own?'Your listing':'Buy now'}</button></form>
+ <div class="err" role="alert"></div></div></article>`}
+
+$('#bgrid').addEventListener('submit',e=>{e.preventDefault();const f=e.target.closest('.buyf');if(!f)return;
+ const x=SAMPLE_LISTINGS.find(s=>s.id==f.dataset.id),err=f.nextElementSibling,inp=f.querySelector('input');err.textContent='';
+ if(!x)return err.textContent='You cannot buy your own listing.';
+ const stock=lsGet('w2w_stock',{}),left=x.id in stock?+stock[x.id]:x.kg,q=Math.round(parseFloat(inp.value)*10)/10;
+ if(left<=0)return err.textContent='This listing is sold out.';
+ if(!isFinite(q)||q<=0){err.textContent='Enter how many kg you want (at least 0.1 kg).';return inp.focus()}
+ if(q>left){err.textContent=`Only ${fmtKg(left)} available.`;return inp.focus()}
+ const total=Math.round(q*x.ppk*100)/100;
+ if(!confirm(`Buy ${fmtKg(q)} of ${x.title} from ${x.seller} for ${inr2(total)}?`))return;
+ const p=lsGet('w2w_purchases',[]),list=Array.isArray(p)?p:[],dem=demand();
+ stock[x.id]=Math.round((left-q)*10)/10;dem[x.type]=(dem[x.type]||0)+q;
+ list.push({buyer:user.id,date:new Date().toISOString(),listing:x.id,item:x.title,type:x.type,qty:q,ppk:x.ppk,total});
+ if(!(lsSet('w2w_stock',stock)&&lsSet('w2w_purchases',list)&&lsSet('w2w_demand',dem)))return toast('Could not save. Your browser is blocking storage.');
+ toast(`Bought ${fmtKg(q)} of ${x.title} for ${inr2(total)} 🎉`);renderBuy()});
+$('#bq').oninput=e=>{BF.q=e.target.value;renderBuy()};
+$('#btype').onchange=e=>{BF.type=e.target.value;renderBuy()};
+$('#bsort').onchange=e=>{BF.sort=e.target.value;renderBuy()};
+seg('#pseg',v=>{pBy=v;renderMyBuys(myBuys())});
+
+function pie(key,sel,rows,fmt){if(!window.Chart)return;const sum=rows.reduce((s,r)=>s+r[1],0);charts[key]?.destroy();
+ charts[key]=new Chart($(sel),{type:'pie',data:{labels:rows.map(r=>r[0]),datasets:[{data:rows.map(r=>r[1]),backgroundColor:rows.map(r=>BCOL[r[0]]||BCOL.Other),borderColor:'#fff',borderWidth:2,hoverOffset:6}]},
+  options:{responsive:true,maintainAspectRatio:false,animation:{duration:300},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${fmt(c.raw)} · ${pct(c.raw,sum)}`}}}}})}
+function renderDemand(dem){const rows=BTYPES.map(t=>[t,+dem[t]||0]).sort((a,b)=>b[1]-a[1]),sum=rows.reduce((s,r)=>s+r[1],0),avg=sum/rows.length;
+ $('#dlegend').innerHTML=rows.map(([t,v])=>`<li><i style="background:${BCOL[t]}"></i><span>${BICON[t]} ${t}</span><b>${pct(v,sum)}</b><em class="${v>=avg?'hi':'lo'}">${v>=avg?'High':'Low'}</em></li>`).join('');
+ pie('demand','#dchart',rows,v=>fmtKg(v)+' wanted')}
+function renderMyBuys(list){const has=list.length>0;$('#pempty').hidden=has;$('#pwrap').hidden=$('#pseg').hidden=!has;if(!has)return;
+ const by={};list.forEach(x=>by[x.type]=(by[x.type]||0)+(pBy=='kg'?+x.qty:+x.total)||0);
+ const rows=Object.entries(by).sort((a,b)=>b[1]-a[1]),sum=rows.reduce((s,r)=>s+r[1],0),f=pBy=='kg'?fmtKg:inr2;
+ $('#plegend').innerHTML=rows.map(([t,v])=>`<li><i style="background:${BCOL[t]||BCOL.Other}"></i><span>${BICON[t]||'♻️'} ${esc(t)}</span><b>${f(v)} · ${pct(v,sum)}</b></li>`).join('');
+ pie('mine','#pchart',rows,f)}
+function renderHistory(list){const r=[...list].sort((a,b)=>String(b.date).localeCompare(String(a.date))),spent=r.reduce((s,x)=>s+(+x.total||0),0);
+ $('#bspent').textContent=r.length?`${r.length} purchase${r.length==1?'':'s'} · ${inr2(spent)} spent`:'';
+ $('#bhist').innerHTML=r.length?r.map(x=>`<tr><td>${new Date(x.date).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'})}</td><td>${esc(x.item)}</td><td>${BICON[x.type]||'♻️'} ${esc(x.type)}</td><td class="num">${fmtKg(x.qty)}</td><td class="num">${inr2(x.total)}</td></tr>`).join('')
+  :'<tr><td colspan="5" class="muted" style="text-align:center;padding:24px">You have not bought anything yet</td></tr>'}
+
+// ---------- listing detail ----------
+document.addEventListener('click',e=>{const c=e.target.closest('.item,.mini');if(c&&c.dataset.id)openItem(c.dataset.id)});
+document.addEventListener('keydown',e=>{if(e.key=='Enter'&&e.target.classList?.contains('item'))openItem(e.target.dataset.id);if(e.key=='Escape')$('#ov').hidden=true});
+function openItem(id){const x=all.find(i=>i.id==id);if(!x)return;const mine=x.seller_id==user.id,sold=!active(x);
+ $('#ov').innerHTML=`<div class="card" style="position:relative"><button class="x" aria-label="Close">×</button><div class="ph c-${CLS[x.cat]}">${x.photo_url?`<img src="${esc(x.photo_url)}" alt="">`:ICON[x.cat]}<span class="badge ${sold?'sold':isAuction(x)?'live':''}">${sold?'Sold':isAuction(x)?'Live auction':'Buy now'}</span></div>
+ <div style="padding:20px"><h2 style="margin:0 0 4px">${esc(x.title)}</h2><div class="muted">${esc(x.cat)}${x.area?' · 📍 '+esc(x.area):''}</div>
+ <div style="display:flex;justify-content:space-between;align-items:end;margin:16px 0"><div><div class="muted">${isAuction(x)?'Starting price':'Price'}</div><div class="price" style="font-size:30px">${inr(x.price)}</div></div><div class="muted" style="text-align:right">${esc(+x.weight_kg)} kg<br>≈ ${inr(x.price/(x.weight_kg||1))}/kg</div></div>
+ <dl class="kv"><dt>Sale type</dt><dd>${isAuction(x)?'Auction · '+left(x):'Fixed price'}</dd><dt>Material</dt><dd>${esc(x.waste_type||x.cat)}</dd><dt>Listed</dt><dd>${ago(x.created_at)}</dd></dl>
+ <div style="display:flex;gap:10px;margin-top:20px">${mine?(sold?'':`<button class="btn" data-sold="${esc(x.id)}" style="flex:1">✓ Mark as sold</button>`)+`<button class="btn o" data-del="${esc(x.id)}">Delete</button>`
+  :`<button class="btn" style="flex:1" data-ask="${esc(x.id)}">💬 Ask WasteBot about this</button>`}</div></div></div>`;$('#ov').hidden=false}
+$('#ov').onclick=async e=>{const t=e.target;if(t==$('#ov')||t.closest('.x'))return $('#ov').hidden=true;
+ if(t.dataset.sold){const {error}=await db.from('listings').update({status:'sold'}).eq('id',t.dataset.sold);if(error)return toast(error.message);$('#ov').hidden=true;toast('Marked as sold 🎉');refresh()}
+ if(t.dataset.del){if(!confirm('Delete this listing?'))return;const {error}=await db.from('listings').delete().eq('id',t.dataset.del);if(error)return toast(error.message);$('#ov').hidden=true;toast('Listing deleted');refresh()}
+ if(t.dataset.ask){const x=all.find(i=>i.id==t.dataset.ask);$('#ov').hidden=true;openChat();send(`Is ${inr(x.price)} a fair price for ${x.weight_kg} kg of ${x.title}?`)}};
+
+// ---------- sell ----------
+$('#drop').onclick=$('#gal').onclick=()=>{$('#ph').removeAttribute('capture');$('#ph').click()};
+$('#cam').onclick=()=>{$('#ph').setAttribute('capture','environment');$('#ph').click()};
+$('#ph').onchange=e=>e.target.files[0]&&load(e.target.files[0]);
+['dragover','dragleave','drop'].forEach(t=>$('#drop').addEventListener(t,e=>{e.preventDefault();$('#drop').classList.toggle('over',t=='dragover');if(t=='drop'&&e.dataTransfer.files[0])load(e.dataTransfer.files[0])}));
+function load(f){const i=new Image();i.onload=()=>{const k=Math.min(1,800/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;
+ c.getContext('2d').drawImage(i,0,0,c.width,c.height);img=c.toDataURL('image/jpeg',.8);c.toBlob(b=>blob=b,'image/jpeg',.8);
+ $('#drop').innerHTML=`<img src="${img}" alt="Your waste photo"><span class="btn o sm chg">Change photo</span>`;analyze()};i.src=URL.createObjectURL(f)}
+async function analyze(){const r=$('#res');an=null;$('#form').hidden=true;r.className='card ai';
+ r.innerHTML='<span class="tag">AI analysis</span><h3>Looking at your photo…</h3><div class="shimmer" style="width:70%"></div><div class="shimmer" style="width:50%"></div><div class="shimmer" style="width:60%"></div>';
+ const {data,error}=await db.functions.invoke('ai',{body:{mode:'analyze',image:img}});
+ if(error||data?.error){r.innerHTML=`<span class="tag">AI analysis</span><h3>Couldn't analyse</h3><p class="muted">${esc(data?.error||'AI is not set up yet. Deploy the "ai" function in Supabase.')}</p><button class="btn sm" onclick="analyze()">Try again</button>`;return}
+ an=data;if(an.hazardous){r.className='card warn';r.innerHTML=`<span class="tag" style="color:#B91C1C">⚠ Hazardous</span><h3>${esc(an.waste_type)}</h3><p>Hazardous waste can't be sold here. Please take it to an authorised collection centre.</p><p class="muted">${esc(an.tip||'')}</p>`;return}
+ if(an.waste_type=='Not waste'||an.waste_type=='Unknown'){r.innerHTML='<span class="tag">AI analysis</span><h3>No waste found</h3><p class="muted">Try a clearer, closer photo of the material.</p>';return}
+ const c=cat(an.waste_type);r.innerHTML=`<span class="tag">✨ AI analysis</span><h3>${ICON[c]} ${esc(an.waste_type)}</h3><dl class="kv"><dt>Category</dt><dd>${c}</dd><dt>Condition</dt><dd>${esc(an.condition)}</dd><dt>Hazardous</dt><dd>No</dd><dt>Rate</dt><dd class="price">${inr(an.price_per_kg_min)}–${inr(an.price_per_kg_max)} per kg</dd></dl>${an.tip?`<p class="muted" style="margin:12px 0 0">💡 ${esc(an.tip)}</p>`:''}<p class="muted" style="font-size:12px;margin:8px 0 0">Estimate only — real rates vary by city.</p>`;
+ $('#ti').value=an.waste_type;$('#form').hidden=false;calc()}
+function calc(){if(!an)return;const w=+$('#w').value||0,t=Math.round((an.price_per_kg_min+an.price_per_kg_max)/2*w);$('#rate').textContent=`${w} kg × ${inr((an.price_per_kg_min+an.price_per_kg_max)/2)}/kg`;$('#sug').textContent=inr(t);$('#pr').value=t}
+$('#w').oninput=calc;let sale='auction';seg('#mseg',v=>{sale=v;$('#prl').textContent=v=='auction'?'Starting price (₹)':'Your price (₹)'});
+$('#pub').onclick=async()=>{const b=$('#pub');if(!(+$('#pr').value>0)||!(+$('#w').value>0))return toast('Add a weight and price');b.disabled=true;b.innerHTML='<span class="spin"></span> Publishing…';
+ try{const path=user.id+'/'+Date.now()+'.jpg',up=await db.storage.from('listing-photos').upload(path,blob,{contentType:'image/jpeg'});if(up.error)throw up.error;
+  const url=db.storage.from('listing-photos').getPublicUrl(path).data.publicUrl;
+  const ins=await db.from('listings').insert({seller_id:user.id,title:$('#ti').value.trim()||an.waste_type,waste_type:an.waste_type,weight_kg:+$('#w').value,price:+$('#pr').value,sale_type:sale,photo_url:url,area});if(ins.error)throw ins.error;
+  resetSell();toast('Listed! 🎉 Buyers nearby can see it now');await refresh();location.hash='#mine'}
+ catch(x){toast(x.message)}finally{b.disabled=false;b.textContent='List it now'}};
+function resetSell(){img='';blob=null;$('#ph').value='';$('#form').hidden=true;$('#drop').innerHTML='<div><div class="big">📷</div><b>Photo of your waste</b><p class="muted">Tap to take a photo or upload from gallery<br>or drag an image here</p></div>';
+ $('#res').className='card ai';$('#res').innerHTML='<span class="tag">AI analysis</span><h3>Waiting for a photo</h3><p class="muted" style="margin:0">Add a photo and our AI will identify the material and suggest a price.</p>'}
+
+// ---------- location ----------
+function locate(){navigator.geolocation?.getCurrentPosition(async p=>{try{const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${p.coords.latitude}&lon=${p.coords.longitude}`),a=(await r.json()).address||{};
+  area=[a.suburb||a.neighbourhood||a.village,a.city||a.town||a.state_district].filter(Boolean).join(', ');try{if(area)localStorage.setItem('w2w_location',area)}catch{}setLoc('📍 '+(area||'Location found'));render()}catch{setLoc('📍 Location unavailable')}},()=>setLoc('📍 Location unavailable'))}
+const setLoc=t=>['#loc','#loc2','#loc3','#loc4'].forEach(s=>$(s).textContent=t);
+
+// ---------- chat ----------
+const openChat=()=>{$('#chat').hidden=false;$('#ci').focus()};
+$('#fab').onclick=()=>$('#chat').hidden?openChat():$('#chat').hidden=true;$('#cx').onclick=()=>$('#chat').hidden=true;
+$('#sugg').onclick=e=>e.target.tagName=='BUTTON'&&send(e.target.textContent);
+$('#cf').onsubmit=e=>{e.preventDefault();const t=$('#ci').value.trim();if(t){$('#ci').value='';send(t)}};
+async function send(t){add(t,'u');hist.push({role:'user',content:t});const w=add('Typing…','b');
+ const {data,error}=await db.functions.invoke('ai',{body:{mode:'chat',messages:hist}});
+ w.textContent=error||data?.error?(data?.error||'Chat is not set up yet.'):data.reply;if(data?.reply)hist.push({role:'assistant',content:data.reply});
+ // show matching live listings under the answer
+ const c=cat(t);if(c!='Other')all.filter(x=>active(x)&&x.cat==c&&x.seller_id!=user.id).slice(0,2).forEach(x=>{const d=document.createElement('div');d.className='mini';d.dataset.id=x.id;
+  d.innerHTML=`<i class="c-${CLS[x.cat]}">${x.photo_url?`<img src="${esc(x.photo_url)}" alt="">`:ICON[x.cat]}</i><div><b>${esc(x.title)}, ${esc(+x.weight_kg)} kg</b><div class="muted" style="font-size:12px">${x.area?esc(x.area.split(',')[0])+' · ':''}${isAuction(x)?'Auction':'Buy now'} · ${inr(x.price)}</div></div>`;$('#msgs').append(d)});
+ $('#msgs').scrollTop=1e9}
+function add(t,c){const d=document.createElement('div');d.className='m '+c;d.textContent=t;$('#msgs').append(d);$('#msgs').scrollTop=1e9;return d}
+
+// ---------- helpers ----------
+function seg(s,fn){$(s).onclick=e=>{const b=e.target.closest('button');if(!b)return;$$(s+' button').forEach(x=>x.classList.toggle('on',x==b));fn(b.dataset.v)}}
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.append(d);setTimeout(()=>d.remove(),3000)}
+setInterval(()=>{if(user&&!document.hidden&&location.hash!='#buy')render()},60000); // keep auction countdowns fresh
+
+// Stay logged in after refresh
+db.auth.getSession().then(({data})=>{if(data.session)enter(data.session.user)});
+</script></body></html>

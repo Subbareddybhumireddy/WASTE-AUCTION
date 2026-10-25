@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Waste2Worth — Turn waste into worth</title>
+<meta name="description" content="Photograph your scrap, let verified buyers bid for it, and get paid for the weight measured at your door.">
+<meta name="theme-color" content="#0e7a4b">
+<!-- Apply saved theme before first paint (no flash). Key: w2w_theme -->
+<script>(function(){var t;try{t=localStorage.getItem('w2w_theme')}catch(e){}if(t!=='dark'&&t!=='light')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t})()</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- decorative background -->
+<div class="bgfx" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><i class="dots"></i></div>
+
+<!-- ============ PUBLIC (logged out) ============ -->
+<div id="pub" hidden>
+ <header class="pnav">
+  <a class="logo" href="#top" data-act="top"><span class="mark">♻</span><span>Waste2Worth<small>Waste in. Value out.</small></span></a>
+  <nav class="plinks" aria-label="Sections">
+   <a href="#how" data-act="jump" data-to="how">How it works</a>
+   <a href="#roles" data-act="jump" data-to="roles">Who it's for</a>
+   <a href="#prices" data-act="jump" data-to="prices">Prices</a>
+  </nav>
+  <div class="pnav-r">
+   <button class="icon-btn" type="button" data-act="theme" aria-label="Switch theme"><span class="i-moon">🌙</span><span class="i-sun">☀️</span></button>
+   <button class="btn s sm" data-act="auth" data-mode="login">Log in</button>
+   <button class="btn sm" data-act="auth" data-mode="signup">Sign up</button>
+  </div>
+ </header>
+ <main id="landing"></main>
+</div>
+
+<!-- ============ APP (logged in) ============ -->
+<div id="shell" hidden>
+ <aside class="side" id="side" aria-label="Main"></aside>
+ <div class="mainc">
+  <header class="topb" id="topb"></header>
+  <main id="view" tabindex="-1"></main>
+ </div>
+ <nav class="bnav" id="bnav" aria-label="Main"></nav>
+</div>
+
+<!-- shared layers -->
+<div id="ov" class="ov" hidden></div>
+<div id="nb" class="nb" role="status" aria-live="polite"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<button id="fab" class="fab" hidden aria-label="Open WasteBot">💬 <span>WasteBot</span></button>
+<div id="chat" class="chat card" hidden role="dialog" aria-label="WasteBot chat">
+ <div class="chat-hd"><div><b>WasteBot</b><small>Ask anything about scrap</small></div><button id="cx" class="icon-btn" aria-label="Close chat">×</button></div>
+ <div id="msgs" aria-live="polite"><div class="m b">Hi! 👋 I can help you price, sort and sell scrap. Ask me anything.</div></div>
+ <div id="sugg"><button>Copper rates</button><button>Can I sell old newspaper?</button><button>E-waste tips</button><button>How does bidding work?</button></div>
+ <form id="cf"><input id="ci" aria-label="Message" placeholder="Ask about any waste" autocomplete="off"><button class="btn sm">Send</button></form>
+</div>
+
+<input id="filePick" type="file" accept="image/*" hidden>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="catalog.js"></script>
+<script src="js/core.js"></script>
+<script src="js/market.js"></script>
+<script src="js/seller.js"></script>
+<script src="js/buyer.js"></script>
+<script src="js/collector.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/landing.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

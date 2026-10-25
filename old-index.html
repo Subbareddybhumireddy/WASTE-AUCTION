@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#103c2d">
+  <title>Waste2Worth — Turn your waste into worth</title>
+  <style>
+    :root{--green:#145c40;--deep:#103c2d;--lime:#d9f36a;--mint:#eaf5ed;--ink:#183329;--muted:#738078;--line:#e7ece8;--paper:#f7f9f6;--white:#fff;--shadow:0 14px 40px #18332912}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
+    .topbar{height:76px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;position:sticky;top:0;z-index:5;padding:0 max(calc((100vw - 1200px)/2),24px);gap:36px}
+    .brand{display:flex;gap:10px;align-items:center;font-size:20px;font-weight:900;letter-spacing:-.7px;color:var(--deep);white-space:nowrap}.brandmark{width:38px;height:38px;border-radius:13px;background:var(--green);color:var(--lime);display:grid;place-items:center;font-size:21px}
+    .tagline{font-size:11px;color:#748077;font-weight:500;letter-spacing:0;display:block;margin-top:-3px}.navlinks{display:flex;align-items:center;gap:28px;color:#526159;font-size:13px;font-weight:650}.navlinks a:hover,.navlinks a.active{color:var(--green)}
+    .rightnav{margin-left:auto;display:flex;align-items:center;gap:12px}.location{color:#617067;font-size:12px;white-space:nowrap}.location b{color:var(--ink)}.avatar{border:0;width:38px;height:38px;border-radius:50%;background:#e7f2dc;color:var(--green);font-weight:800}.btn{border:0;border-radius:10px;padding:11px 17px;font-weight:750;font-size:13px;transition:.18s}.btn:hover{transform:translateY(-1px);filter:brightness(.97)}.btn-primary{background:var(--green);color:white}.btn-light{background:white;border:1px solid var(--line);color:var(--ink)}.btn-lime{background:var(--lime);color:var(--deep)}.iconbtn{border:1px solid var(--line);background:white;width:40px;height:40px;border-radius:12px}
+    main{max-width:1200px;margin:auto;padding:28px 24px 70px}.hero{position:relative;isolation:isolate;overflow:hidden;min-height:345px;border-radius:26px;background:var(--deep);color:white;padding:48px 54px;display:flex;align-items:center;box-shadow:var(--shadow)}.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;z-index:-1}.hero:before{width:440px;height:440px;background:#245f452e;right:90px;top:-210px}.hero:after{width:310px;height:310px;background:#c8ef571a;right:-55px;bottom:-205px}.hero-copy{max-width:575px}.eyebrow{text-transform:uppercase;letter-spacing:2.2px;color:var(--lime);font-size:10px;font-weight:850}.hero h1{font-size:clamp(37px,5vw,58px);letter-spacing:-2.8px;line-height:1.03;margin:14px 0 15px}.hero p{color:#d0ded5;max-width:460px;font-size:15px;margin:0 0 25px}.hero-actions{display:flex;align-items:center;gap:11px}.hero-note{position:absolute;right:8%;bottom:40px;color:#ffffff9c;font-size:11px}.hero-sticker{position:absolute;right:13%;top:50px;width:220px;height:220px;border-radius:50%;background:#ffffff0b;border:1px solid #ffffff18;display:grid;place-items:center;font-size:105px;transform:rotate(-11deg)}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:17px;overflow:hidden;margin:20px 0 37px}.stat{padding:17px 22px;background:white}.stat strong{font-size:21px;letter-spacing:-.5px;display:block}.stat span{font-size:11px;color:var(--muted)}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:34px 0 17px}.section-head h2{margin:0;font-size:25px;letter-spacing:-.8px}.section-head p{margin:4px 0 0;color:var(--muted);font-size:12px}.text-link{font-size:12px;color:var(--green);font-weight:800;border:0;background:none}
+    .toolbar{display:grid;grid-template-columns:minmax(190px,1fr) auto auto auto;gap:10px;margin-bottom:14px}.searchbox,.selectbox{height:44px;background:#fff;border:1px solid var(--line);border-radius:11px;display:flex;align-items:center;padding:0 13px;gap:8px;color:#718078}.searchbox input{border:0;outline:0;width:100%;color:var(--ink);font-size:13px}.selectbox select{border:0;outline:0;background:transparent;color:var(--ink);font-size:12px;font-weight:650}.chips{display:flex;gap:8px;overflow:auto;padding:3px 0 17px}.chip{border:1px solid var(--line);border-radius:30px;background:#fff;color:#637168;padding:8px 15px;font-size:12px;font-weight:700;white-space:nowrap}.chip.selected{background:var(--deep);color:white;border-color:var(--deep)}
+    .listings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}.card{background:white;border:1px solid var(--line);border-radius:17px;overflow:hidden;transition:.2s;position:relative}.card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}.cover{height:190px;display:grid;place-items:center;position:relative;overflow:hidden}.cover:before,.cover:after{content:"";position:absolute;border-radius:50%;background:#ffffff22}.cover:before{width:190px;height:190px;top:-95px;right:-25px}.cover:after{width:120px;height:120px;bottom:-73px;left:13px}.cover-emoji{font-size:83px;filter:drop-shadow(0 12px 10px #263d3222);z-index:1}.cover-metal{background:linear-gradient(140deg,#d9e3dd,#8a9b91)}.cover-plastic{background:linear-gradient(140deg,#d8edcf,#80b87a)}.cover-paper{background:linear-gradient(140deg,#f0dfba,#c1a477)}.cover-ewaste{background:linear-gradient(140deg,#d3d8ef,#858bb4)}.cover-glass{background:linear-gradient(140deg,#c8eae1,#61a78d)}.cover-copper{background:linear-gradient(140deg,#f1d1b3,#bc7950)}.badge{position:absolute;left:13px;top:13px;border-radius:30px;background:#ffffffed;padding:6px 9px;font-size:9px;font-weight:850;letter-spacing:.5px;color:var(--deep)}.heart{position:absolute;right:12px;top:12px;width:32px;height:32px;border:0;border-radius:50%;background:#ffffffdf;color:#6e7971;font-size:17px;z-index:2}.heart.saved{color:#db5b62}.card-body{padding:15px 16px 14px}.card-title-row{display:flex;align-items:start;justify-content:space-between;gap:10px}.card h3{margin:0;font-size:15px;letter-spacing:-.2px}.quality{font-size:9px;font-weight:750;border-radius:20px;padding:5px 8px;background:#edf5ed;color:#43804c;white-space:nowrap}.meta{color:#7c8880;font-size:11px;margin-top:6px}.price-row{display:flex;justify-content:space-between;align-items:end;margin-top:15px}.price{color:var(--green);font-size:20px;font-weight:900;letter-spacing:-.5px}.price small{font-size:10px;color:#819087;font-weight:600;letter-spacing:0}.card-foot{border-top:1px solid #eff1ef;margin-top:13px;padding-top:11px;display:flex;align-items:center;justify-content:space-between;color:#7b867e;font-size:10px}.distance{display:flex;align-items:center;gap:4px}.empty{grid-column:1/-1;text-align:center;padding:55px 15px;background:white;border-radius:16px;color:var(--muted)}
+    .sell-strip{display:flex;align-items:center;justify-content:space-between;gap:20px;background:#eff5e8;border-radius:20px;padding:25px 30px;margin-top:40px}.sell-strip h2{margin:0 0 3px;font-size:20px}.sell-strip p{margin:0;color:#718071;font-size:12px}.strip-icon{font-size:36px;margin-right:12px}.strip-copy{display:flex;align-items:center}.recent{margin-top:39px;display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.panel{background:white;border:1px solid var(--line);border-radius:17px;padding:21px}.panel h3{font-size:15px;margin:0 0 16px}.sold-row{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #f0f2f0;padding:11px 0;font-size:11px}.sold-row:first-of-type{border-top:0}.sold-row span{color:#78847d}.impact{background:var(--deep);color:#fff;border-radius:17px;padding:23px;position:relative;overflow:hidden}.impact:after{content:"♻";font-size:130px;position:absolute;right:-4px;bottom:-50px;color:#ffffff0a}.impact p{color:#c4d3c9;font-size:12px}.impact strong{display:block;font-size:31px;color:var(--lime);letter-spacing:-1px}.impact .btn{margin-top:9px}
+    footer{background:white;border-top:1px solid var(--line);padding:25px max(calc((100vw - 1200px)/2),24px);color:#78847d;font-size:11px;display:flex;justify-content:space-between;gap:15px}
+    .modal-backdrop{position:fixed;inset:0;background:#0a2119a3;z-index:10;display:none;align-items:center;justify-content:center;padding:18px}.modal-backdrop.open{display:flex}.modal{background:white;border-radius:20px;padding:25px;width:min(510px,100%);max-height:90vh;overflow:auto;box-shadow:0 30px 80px #06140e55}.modal h2{margin:0;font-size:21px;letter-spacing:-.6px}.modal-sub{color:var(--muted);font-size:12px;margin:5px 0 18px}.modal-close{float:right;border:0;background:#f1f4f1;border-radius:50%;width:31px;height:31px;font-size:17px}.field{margin:13px 0}.field label{display:block;font-size:11px;font-weight:750;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid #dfe6e0;border-radius:10px;padding:11px 12px;outline:none;color:var(--ink);background:#fff}.field input:focus,.field select:focus,.field textarea:focus{border-color:#5e9b70;box-shadow:0 0 0 3px #5e9b7018}.field textarea{resize:vertical;min-height:65px}.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.modal .btn{width:100%;margin-top:7px}.helptext{color:#839087;font-size:10px;margin-top:5px}.notice{display:none;border-radius:10px;padding:11px 12px;font-size:11px;margin:12px 0}.notice.show{display:block}.notice.success{background:#eef8ef;color:#28633b}.notice.warn{background:#fff6e7;color:#795b1a}.estimate{background:#f0f6ec;border:1px solid #e2eddb;border-radius:12px;padding:14px;font-size:12px;margin:13px 0}.demo-note{font-size:10px;color:#829087;margin-top:14px;line-height:1.45}.photo-preview{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.photo-preview img{width:66px;height:58px;object-fit:cover;border-radius:8px}.mobile-menu{display:none}
+    /* ---- Login / sign-up screen (the app is hidden until you log in) ---- */
+    body.logged-out #app{display:none}body.logged-in #auth-screen{display:none}
+    .auth-screen{min-height:100vh;display:grid;place-items:center;padding:24px 16px;background:var(--deep);position:relative;overflow:hidden;isolation:isolate}.auth-screen:before,.auth-screen:after{content:"";position:absolute;border-radius:50%;z-index:-1}.auth-screen:before{width:520px;height:520px;background:#245f452e;right:-160px;top:-220px}.auth-screen:after{width:360px;height:360px;background:#c8ef571a;left:-120px;bottom:-200px}
+    .auth-card{background:white;border-radius:22px;padding:28px;width:min(430px,100%);box-shadow:0 30px 80px #06140e55}.auth-card .brand{margin-bottom:20px}.auth-card .btn{width:100%;margin-top:7px}.auth-card[data-mode="login"] .signup-only{display:none}
+    .auth-tabs{display:grid;grid-template-columns:1fr 1fr;background:#f1f4f1;border-radius:12px;padding:4px}.auth-tabs button{border:0;background:none;border-radius:9px;padding:9px;font-weight:750;font-size:13px;color:#637168}.auth-tabs button.active{background:white;color:var(--deep);box-shadow:0 2px 8px #18332914}
+    .role-pick{display:grid;grid-template-columns:1fr 1fr;gap:10px}.role-pick label{border:1px solid #dfe6e0;border-radius:10px;padding:11px 12px;font-size:12px;font-weight:700;display:flex;gap:8px;align-items:center;cursor:pointer;margin:0}.role-pick label:has(input:checked){border-color:var(--green);background:var(--mint)}
+    .notice.error{background:#fdecec;color:#9b2c2c}.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+    /* ---- All listings / My listings tabs ---- */
+    .tabs{display:inline-flex;gap:4px;background:white;border:1px solid var(--line);border-radius:12px;padding:4px;margin-top:34px}.tab{border:0;background:none;border-radius:9px;padding:8px 15px;font-size:12px;font-weight:750;color:#637168}.tab.active{background:var(--deep);color:white}.tabs+.section-head{margin-top:16px}
+    /* ---- Real photos on listing cards ---- */
+    .cover img.cover-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.cover.has-photo:before,.cover.has-photo:after{display:none}.per-kg{color:#7c8880;font-size:11px}
+    /* ---- Sell scrap: photo + AI estimate ---- */
+    .photo-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.modal .photo-actions .btn{display:flex;justify-content:center;align-items:center;margin:0;cursor:pointer;text-align:center}.photo-big{display:none;width:100%;max-height:260px;object-fit:contain;background:#f1f4f1;border-radius:12px;margin-top:12px}.photo-big.show{display:block}
+    .estimate h4{margin:0 0 4px;font-size:15px}.est-price{font-size:20px;font-weight:900;color:var(--green);margin:6px 0}.est-price small{font-size:11px;color:#819087;font-weight:600}.est-note{color:#718071;font-size:10px;margin-top:6px}
+    .welcome{text-align:center}.welcome-icon{font-size:52px;line-height:1;margin-bottom:10px}
+    /* ---- Floating chat ---- */
+    .chat-fab{position:fixed;right:18px;bottom:18px;z-index:9;border:0;border-radius:30px;background:var(--green);color:white;font-weight:800;padding:13px 18px;box-shadow:0 10px 30px #18332940}
+    .chat-panel{position:fixed;right:18px;bottom:76px;z-index:9;width:min(360px,calc(100vw - 32px));height:min(480px,calc(100vh - 110px));background:white;border:1px solid var(--line);border-radius:18px;box-shadow:0 30px 80px #06140e40;display:none;flex-direction:column;overflow:hidden}.chat-panel.open{display:flex}
+    .chat-head{background:var(--deep);color:white;padding:13px 16px;display:flex;justify-content:space-between;align-items:center;font-weight:800}.chat-head small{display:block;color:#c4d3c9;font-weight:500;font-size:10px}.chat-head button{border:0;background:#ffffff1f;color:white;border-radius:50%;width:28px;height:28px}
+    .chat-log{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--paper)}.msg{max-width:85%;padding:9px 12px;border-radius:14px;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}.msg.user{align-self:flex-end;background:var(--green);color:white;border-bottom-right-radius:4px}.msg.bot{align-self:flex-start;background:white;border:1px solid var(--line);border-bottom-left-radius:4px}.msg.typing{color:var(--muted);font-style:italic}
+    .chat-form{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}.chat-form input{flex:1;min-width:0;border:1px solid #dfe6e0;border-radius:10px;padding:10px 12px;outline:none}.chat-form .btn{padding:10px 14px}
+    @media(max-width:850px){.topbar{padding:0 17px;gap:20px}.navlinks{gap:15px}.hero{padding:39px 34px}.hero-sticker{right:5%;opacity:.7}.listings{grid-template-columns:repeat(2,minmax(0,1fr))}.toolbar{grid-template-columns:1fr 1fr}.searchbox{grid-column:1/-1}.rightnav .location{display:none}}
+    @media(max-width:600px){.topbar{height:64px;padding:0 13px;gap:10px}.brand{font-size:17px}.brandmark{width:34px;height:34px}.tagline{font-size:9px}.navlinks{display:none}.rightnav{gap:7px}.rightnav>.btn{padding:9px 11px;font-size:11px}.avatar{width:34px;height:34px}.mobile-menu{display:inline-grid}.mobile-nav{display:none;position:absolute;top:63px;left:0;right:0;background:white;padding:14px 18px;border-bottom:1px solid var(--line);box-shadow:var(--shadow)}.mobile-nav.open{display:grid;gap:12px}.mobile-nav a{padding:6px}.hero{min-height:310px;padding:32px 24px;border-radius:20px}.hero h1{font-size:39px;max-width:330px}.hero p{font-size:13px;max-width:330px}.hero-sticker{right:-27px;top:17px;width:140px;height:140px;font-size:66px;opacity:.45}.hero-note{display:none}main{padding:17px 14px 45px}.stats{grid-template-columns:1fr 1fr;margin:14px 0 29px}.stat{padding:13px 15px}.stat strong{font-size:18px}.section-head h2{font-size:21px}.toolbar{grid-template-columns:1fr 1fr;gap:8px}.selectbox{padding:0 9px}.selectbox select{font-size:11px;max-width:100%}.listings{grid-template-columns:1fr;gap:12px}.cover{height:200px}.sell-strip{padding:19px;align-items:start;flex-direction:column}.recent{grid-template-columns:1fr}.field-row{grid-template-columns:1fr}.hero-actions .btn{padding:10px 13px;font-size:11px}footer{padding:20px 15px;flex-direction:column}.modal{padding:20px}.rightnav #logout-btn{display:none}.auth-card{padding:22px}.chat-fab{right:16px;bottom:16px}.chat-panel{right:16px;bottom:72px}}
+  </style>
+</head>
+<body class="logged-out">
+  <!-- ===== Login / Sign-up screen: shown first, until the user logs in ===== -->
+  <section class="auth-screen" id="auth-screen">
+    <div class="auth-card" data-mode="login">
+      <div class="brand"><span class="brandmark">♻</span><span>Waste2Worth<span class="tagline">Turn your waste into worth</span></span></div>
+      <div class="auth-tabs"><button type="button" class="active" data-auth-tab="login">Log in</button><button type="button" data-auth-tab="signup">Sign up</button></div>
+      <form id="auth-form">
+        <div class="field signup-only"><label for="auth-name">Your name</label><input id="auth-name" name="name" autocomplete="name" placeholder="e.g. Priya Sharma"></div>
+        <div class="field"><label for="auth-email">Email</label><input id="auth-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com"></div>
+        <div class="field"><label for="auth-password">Password</label><input id="auth-password" name="password" type="password" required minlength="6" autocomplete="current-password" placeholder="At least 6 characters"></div>
+        <div class="field signup-only"><label>What brings you here?</label><div class="role-pick"><label><input type="radio" name="role" value="seller" checked> I want to sell</label><label><input type="radio" name="role" value="buyer"> I want to buy</label></div></div>
+        <div class="notice error" id="auth-error" role="alert"></div>
+        <button class="btn btn-primary" type="submit" id="auth-submit">Log in</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== The marketplace app: hidden until the user logs in ===== -->
+  <div id="app">
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Waste2Worth home"><span class="brandmark">♻</span><span>Waste2Worth<span class="tagline">Turn your waste into worth</span></span></a>
+    <nav class="navlinks" aria-label="Main navigation"><a class="active" href="#marketplace" data-view-link="all">Marketplace</a><a href="#marketplace" data-view-link="mine">My listings</a><a href="#impact">Our impact</a><a href="#recently-sold">Recently listed</a></nav>
+    <div class="rightnav"><span class="location">⌖ &nbsp;<b id="city">Finding location…</b></span><button class="btn btn-primary" data-open="sell-modal">＋ Sell scrap</button><button class="btn btn-light" id="logout-btn" data-logout>Log out</button><button class="avatar" id="avatar" title="Your account" data-open="account-modal">?</button><button class="iconbtn mobile-menu" id="menu-toggle" aria-label="Open menu">☰</button></div>
+    <nav class="mobile-nav" id="mobile-nav"><a href="#marketplace" data-view-link="all">Marketplace</a><a href="#marketplace" data-view-link="mine">My listings</a><a href="#impact">Our impact</a><a href="#recently-sold">Recently listed</a><a href="#" data-open="sell-modal">＋ Sell scrap</a><a href="#" data-logout>Log out</a></nav>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">A marketplace for a greener tomorrow</div>
+        <h1>Waste less.<br><span style="color:var(--lime)">Worth more.</span></h1>
+        <p>Give reusable materials a second life. Discover trusted local buyers, fair prices, and a cleaner way to trade scrap.</p>
+        <div class="hero-actions"><a class="btn btn-lime" href="#marketplace">Explore marketplace&nbsp; →</a><button class="btn btn-light" data-open="sell-modal">List your materials</button></div>
+      </div>
+      <div class="hero-sticker" aria-hidden="true">🌱</div><div class="hero-note">Every kilogram makes a difference.</div>
+    </section>
+    <section class="stats" aria-label="Marketplace impact">
+      <!-- These numbers are calculated from real saved listings (0 when empty) -->
+      <div class="stat"><strong id="stat-count">0</strong><span>Listings posted</span></div><div class="stat"><strong id="stat-kg">0 kg</strong><span>Materials listed</span></div><div class="stat"><strong id="stat-value">₹0</strong><span>Value listed by sellers</span></div><div class="stat"><strong id="stat-auctions">0</strong><span>Live auctions</span></div>
+    </section>
+    <section id="marketplace">
+      <div class="tabs"><button class="tab active" data-view="all">All listings</button><button class="tab" data-view="mine">My listings</button></div>
+      <div class="section-head"><div><h2 id="market-title">Materials near you</h2><p id="market-sub">Find your next deal from local sellers.</p></div><button class="text-link" id="clear-filters">Clear filters&nbsp; ↗</button></div>
+      <div class="toolbar">
+        <label class="searchbox"><span>⌕</span><input id="search" type="search" placeholder="Search metal, paper, plastics…"></label>
+        <label class="selectbox"><span>⌖</span><select id="distance" aria-label="Distance"><option value="50">Within 50 km</option><option value="5">Within 5 km</option><option value="10">Within 10 km</option><option value="25">Within 25 km</option></select></label>
+        <label class="selectbox"><span>⇅</span><select id="sale-type" aria-label="Listing type"><option value="all">All listings</option><option value="auction">Auction</option><option value="fixed">Buy now</option></select></label>
+        <label class="selectbox"><span>↕</span><select id="sort" aria-label="Sort listings"><option value="newest">Newest</option><option value="ending">Ending soon</option><option value="price">Lowest price</option><option value="nearest">Nearest</option></select></label>
+      </div>
+      <div class="chips" id="categories"><button class="chip selected" data-category="All">✳ &nbsp;All materials</button><button class="chip" data-category="Metal">⚙ &nbsp;Metal</button><button class="chip" data-category="Plastic">♻ &nbsp;Plastic</button><button class="chip" data-category="Paper">▤ &nbsp;Paper</button><button class="chip" data-category="E-waste">▣ &nbsp;E-waste</button><button class="chip" data-category="Glass">◇ &nbsp;Glass</button><button class="chip" data-category="Other">◌ &nbsp;Other</button></div>
+      <div class="listings" id="listing-grid" aria-live="polite"></div>
+    </section>
+    <section class="sell-strip"><div class="strip-copy"><span class="strip-icon">📦</span><div><h2>Have scrap to sell?</h2><p>List your materials in minutes and connect with buyers in your area.</p></div></div><button class="btn btn-primary" data-open="sell-modal">Create a free listing&nbsp; →</button></section>
+    <section class="recent" id="recently-sold">
+      <div class="panel"><h3>Recently listed</h3><div id="recent-list"></div></div>
+      <div class="impact" id="impact"><div class="eyebrow">Small actions, big impact</div><strong id="impact-kg">0 kg</strong><p>of materials listed for recycling by our community so far.</p><a href="#marketplace" class="btn btn-lime">Be part of the change</a></div>
+    </section>
+  </main>
+  <footer><span>© <span id="year"></span> Waste2Worth · Turn your waste into worth.</span><span>Prices are estimates · Real scrap rates vary</span></footer>
+
+  <!-- ===== Floating chat assistant ===== -->
+  <button class="chat-fab" id="chat-fab" aria-controls="chat-panel">💬 Chat</button>
+  <section class="chat-panel" id="chat-panel" aria-label="Waste2Worth assistant">
+    <div class="chat-head"><div>Waste2Worth assistant<small>Prices are estimates only</small></div><button id="chat-close" aria-label="Close chat">×</button></div>
+    <div class="chat-log" id="chat-log" aria-live="polite"></div>
+    <form class="chat-form" id="chat-form"><input id="chat-input" autocomplete="off" placeholder="Ask about scrap, prices, recycling…" maxlength="1000"><button class="btn btn-primary" type="submit">Send</button></form>
+  </section>
+  </div><!-- /#app -->
+
+  <div class="modal-backdrop" id="sell-modal" role="dialog" aria-modal="true" aria-labelledby="sell-title">
+    <div class="modal"><button class="modal-close" data-close aria-label="Close">×</button><h2 id="sell-title">Sell your scrap</h2><p class="modal-sub">Take a photo, get an AI price estimate, then publish your listing.</p>
+      <form id="sell-form">
+        <div class="field"><label>1. Add a photo</label>
+          <div class="photo-actions"><label class="btn btn-primary" for="camera-input">📷 Take photo</label><label class="btn btn-light" for="gallery-input">🖼 Upload from gallery</label></div>
+          <!-- capture="environment" asks a phone to open the back camera directly -->
+          <input id="camera-input" type="file" accept="image/*" capture="environment" hidden>
+          <input id="gallery-input" type="file" accept="image/*" hidden>
+          <img class="photo-big" id="photo-preview" alt="Preview of your scrap photo">
+          <button class="btn btn-lime" type="button" id="ai-btn" hidden>✨ Get AI price</button>
+        </div>
+        <div class="estimate" id="estimate" hidden></div>
+        <div class="notice warn" id="hazard-warning" role="alert"></div>
+        <div class="field"><label for="item-name">2. What are you selling?</label><input id="item-name" name="name" required maxlength="80" placeholder="e.g. Clean aluminium cans"></div>
+        <div class="field-row"><div class="field"><label for="item-category">Material category</label><select id="item-category" name="category"><option>Metal</option><option>Plastic</option><option>Paper</option><option>E-waste</option><option>Glass</option><option>Other</option></select></div><div class="field"><label for="item-condition">Condition</label><input id="item-condition" name="condition" maxlength="40" placeholder="e.g. Clean & sorted"></div></div>
+        <div class="field-row"><div class="field"><label for="item-weight">Weight (kg)</label><input id="item-weight" name="weight" type="number" min="0.1" step="0.1" required placeholder="e.g. 50"></div><div class="field"><label for="item-price">Total price (₹)</label><input id="item-price" name="price" type="number" min="1" step="1" required placeholder="e.g. 4000"></div></div>
+        <div class="helptext" id="price-help">Enter the total price you want for the whole lot.</div>
+        <div class="field"><label for="item-sale">How would you like to sell?</label><select id="item-sale" name="sale"><option value="fixed">Fixed price · Buy now</option><option value="auction">Auction (3 days, price = starting bid)</option></select></div>
+        <div class="notice success" id="sell-success" role="status"></div><div class="notice error" id="sell-error" role="alert"></div>
+        <button class="btn btn-primary" type="submit" id="publish-btn">Publish listing</button><div class="demo-note">Never list hazardous materials such as batteries, chemicals, paint or medical waste.</div>
+      </form>
+    </div>
+  </div>
+  <div class="modal-backdrop" id="bid-modal" role="dialog" aria-modal="true" aria-labelledby="bid-title">
+    <div class="modal"><button class="modal-close" data-close aria-label="Close">×</button><h2 id="bid-title">Place a bid</h2><p class="modal-sub" id="bid-sub"></p><form id="bid-form"><div class="field"><label for="bid-amount">Your bid for the whole lot (₹)</label><input id="bid-amount" type="number" min="1" required></div><div class="notice warn" id="bid-warning"></div><div class="notice success" id="bid-success" role="status"></div><button class="btn btn-primary" type="submit">Place bid</button><div class="demo-note">Bids are saved on the server. Online payments are not available yet.</div></form></div>
+  </div>
+  <div class="modal-backdrop" id="account-modal" role="dialog" aria-modal="true" aria-labelledby="account-title">
+    <div class="modal"><button class="modal-close" data-close aria-label="Close">×</button><h2 id="account-title">Your account</h2><p class="modal-sub">Your details and listings are saved on the Waste2Worth server.</p><div class="estimate" id="account-info"></div><button class="btn btn-light" data-view-link="mine" data-close>View my listings</button><button class="btn btn-primary" data-logout>Log out</button></div>
+  </div>
+  <!-- Welcome popup shown after login / sign-up -->
+  <div class="modal-backdrop" id="welcome-modal" role="dialog" aria-modal="true" aria-labelledby="welcome-title">
+    <div class="modal welcome"><div class="welcome-icon">🌱</div><h2 id="welcome-title">Welcome!</h2><p class="modal-sub" id="welcome-sub"></p><button class="btn btn-primary" data-close>Let's start</button></div>
+  </div>
+  <script>
+    // =================================================================
+    // Waste2Worth page script
+    // Everything shown here comes from the backend (server.js) — no fake data.
+    // =================================================================
+    const categoryStyle={"Metal":"metal","Plastic":"plastic","Paper":"paper","E-waste":"ewaste","Glass":"glass","Other":"glass"};
+    const categoryEmoji={"Metal":"⚙️","Plastic":"🧴","Paper":"📦","E-waste":"💻","Glass":"🍾","Other":"♻️"};
+    const state={view:"all",category:"All",search:"",distance:50,mode:"all",sort:"newest",bidId:null};
+    let listings=[];             // all listings, loaded from the server
+    let me=null;                 // the logged-in user {id, name, email, role}
+    let token=localStorage.getItem("w2w-token"); // session token, kept so you stay logged in after refresh
+    let myCoords=null,myPlace=""; // your location (if you allow it)
+    let favorites=new Set(JSON.parse(localStorage.getItem("w2w-demo-favorites")||"[]"));
+    localStorage.removeItem("w2w-demo-listings");localStorage.removeItem("w2w-demo-city"); // remove old demo data from the previous version
+    const $=id=>document.getElementById(id);
+    const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    function money(n){return "₹"+Math.round(Number(n)||0).toLocaleString("en-IN")}
+    function showNotice(id,text){$(id).textContent=text;$(id).classList.add("show")}
+    function hideNotice(id){$(id).classList.remove("show")}
+
+    // ---------- Talking to the server ----------
+    // Sends a request to our backend with the session token, and returns the JSON reply
+    async function api(url,options={}){
+      let res;
+      try{
+        res=await fetch(url,{method:options.method||"GET",headers:{"Content-Type":"application/json",...(token?{Authorization:"Bearer "+token}:{})},body:options.body?JSON.stringify(options.body):undefined});
+      }catch(_){throw new Error('Can\'t reach the server. Start it with "npm start" and open http://localhost:3000')}
+      const data=await res.json().catch(()=>({}));
+      if(res.status===401&&token)logoutLocal(); // token expired or invalid → back to login
+      if(!res.ok)throw new Error(data.error||"Something went wrong. Please try again.");
+      return data;
+    }
+
+    // ---------- Login / Sign-up ----------
+    let authMode="login";
+    function setAuthMode(mode){
+      authMode=mode;
+      document.querySelector(".auth-card").dataset.mode=mode;
+      document.querySelectorAll("[data-auth-tab]").forEach(b=>b.classList.toggle("active",b.dataset.authTab===mode));
+      $("auth-submit").textContent=mode==="login"?"Log in":"Create account";
+      $("auth-name").required=mode==="signup";
+      $("auth-password").autocomplete=mode==="login"?"current-password":"new-password";
+      hideNotice("auth-error");
+    }
+    $("auth-form").addEventListener("submit",async e=>{
+      e.preventDefault();
+      const form=e.currentTarget,data=new FormData(form);
+      const body={name:data.get("name"),email:data.get("email"),password:data.get("password"),role:data.get("role")};
+      $("auth-submit").disabled=true;hideNotice("auth-error");
+      try{
+        const result=await api(authMode==="login"?"/api/login":"/api/signup",{method:"POST",body});
+        token=result.token;localStorage.setItem("w2w-token",token);me=result.user;
+        form.reset();
+        await showApp();
+        showWelcome(result.returning);
+      }catch(err){showNotice("auth-error",err.message)}
+      finally{$("auth-submit").disabled=false}
+    });
+    function showWelcome(returning){
+      $("welcome-title").textContent=`${returning?"Welcome back":"Welcome"}, ${me.name}!`;
+      $("welcome-sub").textContent=returning?"Your details and listings have been loaded.":me.role==="buyer"?"Browse materials from local sellers and place bids.":"Snap a photo of your scrap to get an AI price, then list it.";
+      openModal("welcome-modal");
+    }
+    async function showApp(){
+      document.body.classList.replace("logged-out","logged-in");
+      $("avatar").textContent=me.name.charAt(0).toUpperCase();
+      $("account-info").innerHTML=`<b>${esc(me.name)}</b><br>${esc(me.email)}<br>${me.role==="buyer"?"🛒 I want to buy":"📦 I want to sell"} · Member since ${new Date(me.createdAt).toLocaleDateString("en-IN")}`;
+      resetChat();
+      await loadListings();
+      findLocation();
+    }
+    // Clears everything in the browser and shows the login screen again
+    function logoutLocal(){
+      token=null;me=null;listings=[];state.view="all";
+      localStorage.removeItem("w2w-token");
+      document.querySelectorAll(".modal-backdrop.open").forEach(closeModal);
+      $("chat-panel").classList.remove("open");
+      document.body.classList.replace("logged-in","logged-out");
+    }
+    async function logout(){try{await api("/api/logout",{method:"POST"})}catch(_){}logoutLocal()}
+
+    // ---------- Listings ----------
+    async function loadListings(){listings=(await api("/api/listings")).listings;refreshAll()}
+    function refreshAll(){render();renderStats();renderRecent()}
+    const currentPrice=x=>x.mode==="auction"?(x.bid||x.price):x.price;
+    // Straight-line distance in km between you and a listing (needs both locations)
+    function distanceKm(x){
+      if(!myCoords||x.lat==null||x.lon==null)return null;
+      const toRad=d=>d*Math.PI/180,dLat=toRad(x.lat-myCoords.lat),dLon=toRad(x.lon-myCoords.lon);
+      const a=Math.sin(dLat/2)**2+Math.cos(toRad(myCoords.lat))*Math.cos(toRad(x.lat))*Math.sin(dLon/2)**2;
+      return 2*6371*Math.asin(Math.sqrt(a));
+    }
+    function timeLeft(endsAt){
+      const ms=endsAt-Date.now();if(ms<=0)return "Auction ended";
+      const h=Math.floor(ms/36e5),m=Math.floor(ms%36e5/6e4);
+      return h>=24?`${Math.floor(h/24)}d ${h%24}h left`:h?`${h}h ${m}m left`:`${m} min left`;
+    }
+    function render(){
+      if(!me)return;
+      const grid=$("listing-grid"),mine=state.view==="mine";
+      $("market-title").textContent=mine?"My listings":"Materials near you";
+      $("market-sub").textContent=mine?"Everything you have listed for sale.":"Find your next deal from local sellers.";
+      document.querySelectorAll("[data-view]").forEach(t=>t.classList.toggle("active",t.dataset.view===state.view));
+      document.querySelectorAll(".navlinks [data-view-link]").forEach(a=>a.classList.toggle("active",a.dataset.viewLink===state.view));
+      const pool=mine?listings.filter(x=>x.sellerId===me.id):listings;
+      if(!pool.length){grid.innerHTML=`<div class="empty">${mine?"You have no listings yet. Tap “Sell scrap” to add your first one.":"No listings yet. Be the first to sell waste."}</div>`;return}
+      let shown=pool.map(x=>({...x,distance:distanceKm(x)})).filter(x=>(state.category==="All"||x.category===state.category)&&
+        (`${x.name} ${x.category} ${x.place||""}`.toLowerCase().includes(state.search))&&(x.distance==null||x.distance<=state.distance)&&
+        (state.mode==="all"||x.mode===state.mode));
+      shown.sort((a,b)=>state.sort==="price"?currentPrice(a)-currentPrice(b):state.sort==="ending"?(a.endsAt||Infinity)-(b.endsAt||Infinity):state.sort==="nearest"?(a.distance??Infinity)-(b.distance??Infinity):b.createdAt-a.createdAt);
+      if(!shown.length){grid.innerHTML='<div class="empty">No listings match those filters. Try another search or material category.</div>';return}
+      grid.innerHTML=shown.map(x=>{
+        const own=x.sellerId===me.id,auction=x.mode==="auction",ended=auction&&x.endsAt<=Date.now();
+        const button=own?`<button class="btn btn-light" style="width:100%;margin-top:12px" data-action="delete" data-id="${esc(x.id)}">Delete listing</button>`
+          :ended?`<button class="btn btn-light" style="width:100%;margin-top:12px" disabled>Auction ended</button>`
+          :`<button class="btn ${auction?"btn-primary":"btn-light"}" style="width:100%;margin-top:12px" data-action="${auction?"bid":"buy"}" data-id="${esc(x.id)}">${auction?"Place a bid":"Buy now"} &nbsp;→</button>`;
+        return `<article class="card">
+        <div class="cover cover-${categoryStyle[x.category]||"metal"}${x.photo?" has-photo":""}">${x.photo?`<img class="cover-photo" src="${esc(x.photo)}" alt="${esc(x.name)}">`:`<span class="cover-emoji">${categoryEmoji[x.category]||"♻️"}</span>`}<span class="badge">${auction?(ended?"AUCTION ENDED":"● LIVE AUCTION"):"BUY NOW"}</span><button class="heart ${favorites.has(x.id)?"saved":""}" data-fav="${esc(x.id)}" title="Save listing" aria-label="Save ${esc(x.name)}">${favorites.has(x.id)?"♥":"♡"}</button></div>
+        <div class="card-body"><div class="card-title-row"><h3>${esc(x.name)}</h3><span class="quality">${esc(x.condition||"Good condition")}</span></div><div class="meta">${esc(x.category)} &nbsp;·&nbsp; ${Number(x.weight).toLocaleString("en-IN")} kg &nbsp;·&nbsp; ${own?"Your listing":"by "+esc(x.sellerName)}</div>
+          <div class="price-row"><div class="price">${money(currentPrice(x))} <small>${auction?(x.bid?`current bid · ${x.bidCount} bid${x.bidCount===1?"":"s"}`:"starting bid"):"total"}</small></div><span class="per-kg">≈ ${money(currentPrice(x)/x.weight)}/kg</span></div>
+          <div class="card-foot"><span class="distance">⌖ ${x.distance!=null?x.distance.toFixed(1)+" km · ":""}${esc(x.place||"Location not shared")}</span><span>${auction?`⏱ ${timeLeft(x.endsAt)}`:"Ready to buy"}</span></div>
+          ${button}</div></article>`;
+      }).join("");
+    }
+    // Stats are calculated from the real listings (all 0 when there are none)
+    function renderStats(){
+      const kg=listings.reduce((sum,x)=>sum+Number(x.weight||0),0);
+      const value=listings.reduce((sum,x)=>sum+currentPrice(x),0);
+      const live=listings.filter(x=>x.mode==="auction"&&x.endsAt>Date.now()).length;
+      const kgText=Math.round(kg).toLocaleString("en-IN")+" kg";
+      $("stat-count").textContent=listings.length.toLocaleString("en-IN");
+      $("stat-kg").textContent=kgText;$("impact-kg").textContent=kgText;
+      $("stat-value").textContent=money(value);
+      $("stat-auctions").textContent=live.toLocaleString("en-IN");
+    }
+    function renderRecent(){
+      $("recent-list").innerHTML=listings.length?listings.slice(0,4).map(x=>`<div class="sold-row"><b>${esc(x.name)} · ${Number(x.weight).toLocaleString("en-IN")} kg</b><span>${money(currentPrice(x))}${x.place?" · "+esc(x.place):""}</span></div>`).join("")
+        :'<div class="sold-row"><span>Nothing listed yet.</span></div>';
+    }
+    function setView(view){state.view=view;render();$("mobile-nav").classList.remove("open")}
+
+    // ---------- Modals and clicks ----------
+    function openModal(id){document.getElementById(id).classList.add("open");document.body.style.overflow="hidden"}
+    function closeModal(el){el.classList.remove("open");document.body.style.overflow=""}
+    document.addEventListener("click",async e=>{
+      const opener=e.target.closest("[data-open]");if(opener){e.preventDefault();openModal(opener.dataset.open)}
+      if(e.target.closest("[data-close]"))closeModal(e.target.closest(".modal-backdrop"));
+      if(e.target.classList.contains("modal-backdrop"))closeModal(e.target);
+      const authTab=e.target.closest("[data-auth-tab]");if(authTab)setAuthMode(authTab.dataset.authTab);
+      if(e.target.closest("[data-logout]")){e.preventDefault();logout();return}
+      const tab=e.target.closest("[data-view]");if(tab)setView(tab.dataset.view);
+      const viewLink=e.target.closest("[data-view-link]");if(viewLink){setView(viewLink.dataset.viewLink);$("marketplace").scrollIntoView({behavior:"smooth"})}
+      const chip=e.target.closest("[data-category]");if(chip){state.category=chip.dataset.category;document.querySelectorAll(".chip").forEach(c=>c.classList.toggle("selected",c===chip));render()}
+      const fav=e.target.closest("[data-fav]");if(fav){const id=fav.dataset.fav;favorites.has(id)?favorites.delete(id):favorites.add(id);localStorage.setItem("w2w-demo-favorites",JSON.stringify([...favorites]));render()}
+      const act=e.target.closest("[data-action]");if(!act)return;
+      const item=listings.find(x=>x.id===act.dataset.id);if(!item)return;
+      if(act.dataset.action==="bid"){
+        state.bidId=item.id;
+        $("bid-title").textContent=`Bid on ${item.name}`;
+        $("bid-sub").textContent=`${item.bid?"Current bid":"Starting bid"}: ${money(currentPrice(item))} for ${item.weight} kg`;
+        $("bid-amount").min=currentPrice(item)+1;$("bid-amount").value=currentPrice(item)+Math.max(10,Math.round(currentPrice(item)*0.05));
+        hideNotice("bid-warning");hideNotice("bid-success");openModal("bid-modal");
+      }else if(act.dataset.action==="buy"){
+        alert(`To buy "${item.name}", please contact the seller, ${item.sellerName}. Online payments are not available yet.`);
+      }else if(act.dataset.action==="delete"&&confirm(`Delete "${item.name}"?`)){
+        try{await api(`/api/listings/${item.id}`,{method:"DELETE"});listings=listings.filter(x=>x.id!==item.id);refreshAll()}catch(err){alert(err.message)}
+      }
+    });
+    $("search").addEventListener("input",e=>{state.search=e.target.value.toLowerCase().trim();render()});
+    $("distance").addEventListener("change",e=>{state.distance=Number(e.target.value);render()});
+    $("sale-type").addEventListener("change",e=>{state.mode=e.target.value;render()});
+    $("sort").addEventListener("change",e=>{state.sort=e.target.value;render()});
+    $("clear-filters").addEventListener("click",()=>{state.category="All";state.search="";state.distance=50;state.mode="all";state.sort="newest";document.querySelectorAll(".chip").forEach(c=>c.classList.toggle("selected",c.dataset.category==="All"));$("search").value="";$("distance").value="50";$("sale-type").value="all";$("sort").value="newest";render()});
+    $("menu-toggle").addEventListener("click",()=>$("mobile-nav").classList.toggle("open"));
+    $("bid-form").addEventListener("submit",async e=>{
+      e.preventDefault();
+      const amount=Number($("bid-amount").value);
+      try{
+        const result=await api(`/api/listings/${state.bidId}/bid`,{method:"POST",body:{amount}});
+        listings=listings.map(x=>x.id===result.listing.id?result.listing:x);
+        hideNotice("bid-warning");showNotice("bid-success",`Your bid of ${money(amount)} has been placed.`);
+        refreshAll();setTimeout(()=>closeModal($("bid-modal")),950);
+      }catch(err){hideNotice("bid-success");showNotice("bid-warning",err.message)}
+    });
+
+    // ---------- Sell scrap: photo → AI price → publish ----------
+    const sell={photo:null,analysis:null,priceEdited:false};
+    function resetSellForm(){
+      $("sell-form").reset();
+      Object.assign(sell,{photo:null,analysis:null,priceEdited:false});
+      $("photo-preview").classList.remove("show");$("photo-preview").removeAttribute("src");
+      $("ai-btn").hidden=true;$("estimate").hidden=true;$("publish-btn").disabled=false;
+      ["hazard-warning","sell-success","sell-error"].forEach(hideNotice);
+      $("price-help").textContent="Enter the total price you want for the whole lot.";
+    }
+    // Shrinks a photo so its longest side is at most 800px, and returns it as JPEG text (a "data URL")
+    function resizeImage(file,maxSize=800){
+      return new Promise((resolve,reject)=>{
+        const img=new Image();
+        img.onload=()=>{
+          const scale=Math.min(1,maxSize/Math.max(img.width,img.height));
+          const canvas=document.createElement("canvas");
+          canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);
+          const ctx=canvas.getContext("2d");
+          ctx.fillStyle="#fff";ctx.fillRect(0,0,canvas.width,canvas.height); // white background for transparent PNGs
+          ctx.drawImage(img,0,0,canvas.width,canvas.height);
+          URL.revokeObjectURL(img.src);
+          resolve(canvas.toDataURL("image/jpeg",0.8));
+        };
+        img.onerror=()=>reject(new Error("That file doesn't look like a photo. Please try another one."));
+        img.src=URL.createObjectURL(file);
+      });
+    }
+    // Same handler for "Take photo" and "Upload from gallery"
+    async function onPhotoChosen(e){
+      const file=e.target.files[0];e.target.value="";if(!file)return;
+      ["hazard-warning","sell-error","sell-success"].forEach(hideNotice);
+      try{
+        sell.photo=await resizeImage(file);sell.analysis=null;
+        $("photo-preview").src=sell.photo;$("photo-preview").classList.add("show");
+        $("ai-btn").hidden=false;$("estimate").hidden=true;$("publish-btn").disabled=false;
+      }catch(err){showNotice("sell-error",err.message)}
+    }
+    $("camera-input").addEventListener("change",onPhotoChosen);
+    $("gallery-input").addEventListener("change",onPhotoChosen);
+    $("ai-btn").addEventListener("click",async()=>{
+      if(!sell.photo)return;
+      const btn=$("ai-btn");btn.disabled=true;btn.textContent="Analysing photo…";hideNotice("sell-error");
+      try{const result=await api("/api/analyze",{method:"POST",body:{image:sell.photo}});sell.analysis=result;showEstimate(result)}
+      catch(err){showNotice("sell-error",err.message)}
+      finally{btn.disabled=false;btn.textContent="✨ Get AI price"}
+    });
+    // Guess the category from the AI's waste type (you can still change it)
+    function guessCategory(type){
+      const t=type.toLowerCase();
+      if(/e-waste|electronic|circuit|computer|laptop|phone|mobile|charger|keyboard|monitor/.test(t))return "E-waste";
+      if(/glass/.test(t))return "Glass";
+      if(/paper|cardboard|carton|newspaper|book|magazine/.test(t))return "Paper";
+      if(/plastic|pet|hdpe|polythene|pvc/.test(t))return "Plastic";
+      if(/metal|alumin|copper|brass|iron|steel|tin|can/.test(t))return "Metal";
+      return "Other";
+    }
+    function showEstimate(r){
+      $("estimate").innerHTML=`<h4>${esc(r.waste_type)}</h4><div>Condition: <b>${esc(r.condition)}</b> · Confidence: <b>${esc(r.confidence)}</b></div>
+        ${r.hazardous?"":`<div class="est-price">${money(r.price_per_kg_min)} – ${money(r.price_per_kg_max)} <small>per kg</small></div>`}
+        <div>💡 ${esc(r.tip)}</div><div class="est-note">Estimate only, real rates vary.</div>`;
+      $("estimate").hidden=false;
+      if(r.hazardous){
+        // Hazardous waste: block publishing and give safe-disposal advice
+        showNotice("hazard-warning","⚠️ This looks like hazardous waste, so it can't be listed on Waste2Worth. Please take it to an authorised e-waste or hazardous-waste collection centre, or ask your municipal corporation about safe drop-off points. Until then, keep it dry, sealed and away from children and heat.");
+        $("publish-btn").disabled=true;return;
+      }
+      hideNotice("hazard-warning");$("publish-btn").disabled=false;
+      if(r.waste_type!=="Unknown"){
+        if(!$("item-name").value)$("item-name").value=r.waste_type;
+        $("item-category").value=guessCategory(r.waste_type);
+      }
+      if(!$("item-condition").value)$("item-condition").value=r.condition.slice(0,40);
+      sell.priceEdited=false;updateTotal();
+    }
+    // Total price = weight × average AI price per kg (until the user types their own price)
+    function updateTotal(){
+      const kg=Number($("item-weight").value)||0,a=sell.analysis;
+      if(!a||a.hazardous||!a.price_per_kg_max){$("price-help").textContent="Enter the total price you want for the whole lot.";return}
+      const avg=(a.price_per_kg_min+a.price_per_kg_max)/2;
+      $("price-help").textContent=`AI suggests about ${money(avg)}/kg. The total is filled in for you, and you can change it.`;
+      if(!sell.priceEdited&&kg)$("item-price").value=Math.round(kg*avg);
+    }
+    $("item-weight").addEventListener("input",updateTotal);
+    $("item-price").addEventListener("input",()=>{sell.priceEdited=true});
+    $("sell-form").addEventListener("submit",async e=>{
+      e.preventDefault();
+      if(sell.analysis&&sell.analysis.hazardous)return;
+      const data=new FormData(e.currentTarget);
+      const body={name:String(data.get("name")).trim(),category:data.get("category"),condition:String(data.get("condition")).trim(),
+        weight:Number(data.get("weight")),price:Number(data.get("price")),mode:data.get("sale"),photo:sell.photo,
+        analysisId:sell.analysis&&sell.analysis.analysisId,lat:myCoords&&myCoords.lat,lon:myCoords&&myCoords.lon,place:myPlace};
+      $("publish-btn").disabled=true;hideNotice("sell-error");
+      try{
+        const result=await api("/api/listings",{method:"POST",body});
+        listings.unshift(result.listing);refreshAll();
+        showNotice("sell-success","Your listing is live! You can find it under “My listings”.");
+        setTimeout(()=>{closeModal($("sell-modal"));resetSellForm();setView("mine");$("marketplace").scrollIntoView({behavior:"smooth"})},1300);
+      }catch(err){showNotice("sell-error",err.message);$("publish-btn").disabled=false}
+    });
+
+    // ---------- Chat assistant ----------
+    const chatHistory=[]; // [{role:"user"|"assistant", content:"..."}]
+    let chatWaiting=false;
+    function addBubble(role,text){
+      const div=document.createElement("div");
+      div.className="msg "+(role==="user"?"user":"bot");div.textContent=text;
+      $("chat-log").appendChild(div);$("chat-log").scrollTop=$("chat-log").scrollHeight;
+      return div;
+    }
+    function resetChat(){chatHistory.length=0;$("chat-log").innerHTML="";addBubble("assistant","Hi! 👋 Ask me about scrap prices, sorting or recycling.")}
+    $("chat-fab").addEventListener("click",()=>{$("chat-panel").classList.toggle("open");if($("chat-panel").classList.contains("open"))$("chat-input").focus()});
+    $("chat-close").addEventListener("click",()=>$("chat-panel").classList.remove("open"));
+    $("chat-form").addEventListener("submit",async e=>{
+      e.preventDefault();
+      const text=$("chat-input").value.trim();if(!text||chatWaiting)return;
+      $("chat-input").value="";addBubble("user",text);chatHistory.push({role:"user",content:text});
+      const typing=addBubble("assistant","Typing...");typing.classList.add("typing");chatWaiting=true;
+      try{
+        // Only the last 10 messages are sent as context
+        const result=await api("/api/chat",{method:"POST",body:{messages:chatHistory.slice(-10)}});
+        typing.remove();addBubble("assistant",result.reply);chatHistory.push({role:"assistant",content:result.reply});
+      }catch(err){typing.remove();addBubble("assistant","⚠️ "+err.message)}
+      finally{chatWaiting=false}
+    });
+
+    // ---------- Location: show "Area, City" instead of coordinates ----------
+    function findLocation(){
+      const city=$("city");
+      if(!navigator.geolocation){city.textContent="Location unavailable";return}
+      city.textContent="Finding location…";
+      navigator.geolocation.getCurrentPosition(async pos=>{
+        myCoords={lat:pos.coords.latitude,lon:pos.coords.longitude};render();
+        try{myPlace=(await api(`/api/place?lat=${myCoords.lat}&lon=${myCoords.lon}`)).place;city.textContent=myPlace}
+        catch(_){city.textContent="Location unavailable"}
+      },()=>{city.textContent="Location unavailable"},{timeout:10000,maximumAge:600000});
+    }
+
+    // ---------- Start ----------
+    $("year").textContent=new Date().getFullYear();
+    setAuthMode("login");
+    // If a token was saved, try to log back in automatically (keeps you logged in after refresh)
+    (async()=>{
+      if(!token)return;
+      try{me=(await api("/api/me")).user;await showApp()}
+      catch(err){if(token)showNotice("auth-error",err.message)}
+    })();
+    // Refresh listings every minute so new listings and bids show up
+    setInterval(()=>{if(me)loadListings().catch(()=>{})},60000);
+  </script>
+</body>
+</html>

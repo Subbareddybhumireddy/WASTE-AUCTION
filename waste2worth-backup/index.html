@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Waste2Worth — Turn your waste into worth</title>
+<meta name="description" content="Sell your scrap for a fair price or buy recyclable waste by the kilo from verified local sellers.">
+<meta name="theme-color" content="#14573b">
+<!-- Apply saved theme before first paint (no flash). Key: w2w_theme -->
+<script>(function(){var t;try{t=localStorage.getItem('w2w_theme')}catch(e){}if(t!=='dark'&&t!=='light')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t})()</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- reusable icons -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+ <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+ <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+ <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+ <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.6 12.4a1 1 0 0 0 1 .8h9.7a1 1 0 0 0 1-.8L21 7H6"/></symbol>
+ <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+ <symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+</svg>
+
+<!-- ============ LOGIN ============ -->
+<section id="auth">
+ <div class="art">
+  <a class="logo" style="color:#fff"><i>♻</i>Waste2Worth</a>
+  <div>
+   <h1>Your scrap<br>has a <em>price</em>.</h1>
+   <p>Snap a photo of your scrap, get an instant AI price, and sell it to buyers near you — by auction or at a fixed price.</p>
+  </div>
+  <p class="mats">Plastic · Paper · Iron · Metal · Cardboard · Glass · E-waste · Cloth</p>
+ </div>
+ <div class="side">
+  <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch to dark mode"><svg class="i-moon"><use href="#i-moon"/></svg><svg class="i-sun"><use href="#i-sun"/></svg></button>
+  <div class="card">
+   <h2 id="ah">Welcome back</h2>
+   <p class="muted" id="sub" style="margin:0 0 24px">Log in to sell or buy waste.</p>
+   <form id="af">
+    <div id="nm" hidden><label for="n">Your name</label><input id="n" autocomplete="name"></div>
+    <label for="e">Email</label><input id="e" type="email" autocomplete="email" required>
+    <label for="p">Password</label><input id="p" type="password" autocomplete="current-password" minlength="6" required>
+    <div id="rl" hidden><label>I mainly want to</label><div class="seg" id="rseg"><button type="button" data-v="sell" class="on">Sell waste</button><button type="button" data-v="buy">Buy waste</button></div></div>
+    <div class="err" id="er" role="alert"></div>
+    <button class="btn block lg" id="go">Log in</button>
+   </form>
+   <p class="muted" style="text-align:center;margin:20px auto 0">New here? <a href="#" id="sw" style="font-weight:600">Create an account</a></p>
+  </div>
+ </div>
+</section>
+
+<!-- ============ APP ============ -->
+<div id="app" hidden>
+<header class="top">
+ <a class="logo" href="#home" aria-label="Waste2Worth home"><i>♻</i><span>Waste2Worth<small>Turn your waste into worth</small></span></a>
+ <nav id="nav" aria-label="Main">
+  <a href="#home" data-p="home">Home</a><a href="#market" data-p="market">Marketplace</a><a href="#buy" data-p="buy">Buy waste</a><a href="#sell" data-p="sell">Sell waste</a><a href="#mine" data-p="mine">My listings</a>
+ </nav>
+ <div class="hdr-right" style="margin-left:auto">
+  <span class="pill" id="loc">📍 Locating…</span>
+  <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch to dark mode"><svg class="i-moon"><use href="#i-moon"/></svg><svg class="i-sun"><use href="#i-sun"/></svg></button>
+  <a class="btn sm hdr-sell" href="#sell">+ Sell scrap</a>
+  <div class="menu"><button class="av" id="avb" aria-label="Account menu" aria-haspopup="true"></button>
+   <div class="card dd" id="dd" hidden>
+    <div class="dd-me"><span class="av lg" id="avbig" aria-hidden="true"></span><div><b id="who"></b><div class="muted" id="wmail" style="font-size:12px"></div></div></div>
+    <input id="aph" type="file" accept="image/*" hidden>
+    <button id="avcam" type="button">📷 Take profile photo</button>
+    <button id="avgal" type="button">🖼 Choose from gallery</button>
+    <button id="avdel" type="button" hidden>🗑 Remove photo</button>
+    <hr class="dd-sep">
+    <button id="out">Log out</button></div></div>
+ </div>
+</header>
+
+<main id="main">
+
+<!-- HOME -->
+<section id="home" class="page" hidden>
+ <div class="hero">
+  <div>
+   <span class="eyebrow">♻ AI-priced scrap marketplace</span>
+   <h1>Your scrap<br>has a <em>price</em>.</h1>
+   <p class="lead">Snap a photo, get a fair AI price in seconds, and sell to buyers near you — or buy recyclable material by the kilo.</p>
+   <div class="cta"><a class="btn lg" href="#sell">Sell scrap</a><a class="btn lg o" href="#buy">Buy waste</a></div>
+   <div class="counters" id="stats" aria-live="off">
+    <div class="counter"><b id="cKg">0 kg</b><span>kg recycled</span></div>
+    <div class="counter"><b id="cRs" class="amb">₹0</b><span id="cRsL">₹ earned</span></div>
+    <div class="counter"><b id="cAct">0</b><span>active listings</span></div>
+   </div>
+  </div>
+  <div class="hero-art"><div class="card est" id="heroEst"></div></div>
+ </div>
+
+ <div class="sec"><div><h2>Near you</h2><div class="muted" id="nearSub">Fresh listings from local sellers</div></div><a href="#market" class="link">View all →</a></div>
+ <div class="grid" id="near"></div>
+
+ <div class="steps">
+  <div class="card"><div class="n">1</div><b>Snap a photo</b><p class="muted">Take a picture of your scrap — cans, bottles, cardboard, old electronics.</p></div>
+  <div class="card"><div class="n">2</div><b>Get an AI price</b><p class="muted">Our AI names the material, checks it is safe to sell and suggests a fair rate.</p></div>
+  <div class="card"><div class="n">3</div><b>Sell nearby</b><p class="muted">List it as an auction or fixed price and buyers in your area can find it.</p></div>
+ </div>
+</section>
+
+<!-- MARKETPLACE -->
+<section id="market" class="page" hidden>
+ <div class="sec"><div><h2>Materials near you</h2><div class="muted">Find your next deal from local sellers</div></div><span class="pill" id="loc2">📍 Your city</span></div>
+ <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Search copper, plastic, e-waste…" aria-label="Search listings"></div>
+ <div class="chips" id="cats" role="group" aria-label="Filter by material"></div>
+ <div class="chips sub" id="filters" role="group" aria-label="More filters"></div>
+ <div class="count" id="count" aria-live="polite"></div>
+ <div class="grid" id="mgrid"></div>
+</section>
+
+<!-- BUY WASTE -->
+<section id="buy" class="page" hidden>
+ <div class="sec"><div><h2>Buy waste</h2><div class="muted">Buy recyclable scrap by the kilo from local sellers</div></div><span class="pill" id="loc4">📍 Your city</span></div>
+ <div class="btools">
+  <div class="search"><svg aria-hidden="true"><use href="#i-search"/></svg><input id="bq" type="search" placeholder="Search plastic, iron, seller, city…" aria-label="Search waste to buy"></div>
+  <div><label class="sr" for="bsort">Sort by</label><select id="bsort"><option value="demand">Most in demand</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="stock">Most stock</option></select></div>
+ </div>
+ <div class="chips" id="bcats" role="group" aria-label="Filter by waste type"></div>
+ <div class="count" id="bcount" aria-live="polite"></div>
+ <div class="grid" id="bgrid"></div>
+
+ <div class="card" id="ordersCard" style="margin-top:48px" hidden>
+  <div class="phd"><h3>My orders</h3><span class="muted">Track each order from booking to payment</span></div>
+  <div class="orders" id="orders"></div>
+ </div>
+
+ <div class="bcharts">
+  <div class="card"><h3>Demand by waste type</h3><p class="muted">What buyers want this month, in kg. It grows every time someone buys.</p>
+   <div class="pie"><canvas id="dchart" role="img" aria-label="Doughnut chart of demand by waste type. The list below has the same numbers."></canvas></div><ul class="lg" id="dlegend"></ul></div>
+  <div class="card wk"><h3>Demand this week</h3><p class="muted">Kg wanted per day across all materials.</p>
+   <div class="wk-total"><b id="wkTotal">0 kg</b><span class="muted" id="wkSub"></span></div>
+   <div class="week"><canvas id="wchart" role="img" aria-label="Line chart of daily demand for the last 7 days"></canvas></div>
+   <p class="muted" style="font-size:12px">Sample market baseline plus purchases made on this device.</p></div>
+  <div class="card"><div class="phd"><h3>My purchases</h3><div class="seg sm" id="pseg" hidden><button type="button" data-v="kg" class="on">By kg</button><button type="button" data-v="spend">By ₹</button></div></div>
+   <div class="empty" id="pempty"><div class="big">🛒</div><p>You have not bought anything yet</p></div>
+   <div id="pwrap" hidden><div class="pie"><canvas id="pchart" role="img" aria-label="Doughnut chart of what you have bought. The list below has the same numbers."></canvas></div><ul class="lg" id="plegend"></ul></div></div>
+ </div>
+ <p class="muted" id="nochart" hidden>Charts could not load. Check your internet connection. The numbers are still listed above.</p>
+
+ <div class="card" style="margin-top:24px">
+  <div class="phd" style="margin-bottom:8px"><h3>Purchase history</h3><span class="muted" id="bspent"></span></div>
+  <div class="tw"><table><thead><tr><th>Date</th><th>Item</th><th>Type</th><th class="num">Qty</th><th class="num">Total</th></tr></thead><tbody id="bhist"></tbody></table></div>
+ </div>
+</section>
+
+<!-- SELL -->
+<section id="sell" class="page" hidden>
+ <div class="sec"><div><h2>Sell your waste</h2><div class="muted">Photo → AI price → listed in under a minute</div></div><span class="pill" id="loc3">📍 Your city</span></div>
+ <div class="sell">
+  <div>
+   <input id="ph" type="file" accept="image/*" hidden>
+   <div class="drop" id="drop" role="button" tabindex="0" aria-label="Add a photo of your waste"><div><div class="big">📷</div><b>Photo of your waste</b><p class="muted">Tap to take a photo or upload from gallery,<br>or drag an image here</p></div></div>
+   <div class="pick"><button class="btn o sm" id="cam" type="button">📷 Camera</button><button class="btn o sm" id="gal" type="button">🖼 Gallery</button></div>
+  </div>
+  <div>
+   <div class="card ai" id="res"><span class="tag">AI analysis</span><h3>Waiting for a photo</h3><p class="muted" style="margin:0">Add a photo and our AI will identify the material, check it is safe to sell and suggest a price per kg.</p></div>
+   <div class="card" id="form" style="margin-top:16px" hidden>
+    <label for="ti">Title</label><input id="ti" maxlength="80">
+    <label for="w">Weight (kg)</label><input id="w" type="number" min="0.1" step="0.1" value="10">
+    <label>Suggested total</label><div class="total"><span class="muted" id="rate"></span><span class="price" id="sug">₹0</span></div>
+    <label>Sell as</label><div class="seg" id="mseg"><button type="button" data-v="auction" class="on">🔨 Auction</button><button type="button" data-v="fixed">🏷 Fixed price</button></div>
+    <label for="pr" id="prl">Starting price (₹)</label><input id="pr" type="number" min="1">
+    <button class="btn block lg" id="pub">List it now</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- MY LISTINGS -->
+<section id="mine" class="page" hidden>
+ <div class="sec"><div><h2>My listings</h2><div class="muted" id="mineSub"></div></div><a class="btn sm" href="#sell">+ New listing</a></div>
+ <div class="grid" id="mygrid"></div>
+</section>
+</main>
+
+<!-- bottom nav (phones) -->
+<nav class="bnav" id="bnav" aria-label="Main">
+ <a href="#home" data-p="home"><svg aria-hidden="true"><use href="#i-home"/></svg>Home</a>
+ <a href="#buy" data-p="buy"><svg aria-hidden="true"><use href="#i-cart"/></svg>Buy</a>
+ <a href="#sell" data-p="sell" class="sell-tab"><span class="ic"><svg aria-hidden="true" style="width:20px;height:20px"><use href="#i-plus"/></svg></span>Sell</a>
+ <a href="#mine" data-p="mine"><svg aria-hidden="true"><use href="#i-list"/></svg>My listings</a>
+</nav>
+</div>
+
+<div id="ov" class="ov" hidden role="dialog" aria-modal="true"></div>
+<button id="fab" hidden aria-label="Open WasteBot">💬 <span class="fl">WasteBot</span></button>
+<div id="chat" class="card" hidden role="dialog" aria-label="WasteBot chat">
+ <div class="hd"><div><b>WasteBot</b><small>Ask anything about waste</small></div><button id="cx" aria-label="Close chat">×</button></div>
+ <div id="msgs" aria-live="polite"><div class="m b">Hi! 👋 I can help you price, sort and sell scrap. Ask me anything — or try a suggestion below.</div></div>
+ <div id="sugg"><button>Plastic rates</button><button>Can I sell old newspaper?</button><button>E-waste tips</button><button>Prohibited items</button></div>
+ <form id="cf"><input id="ci" aria-label="Message" placeholder="Ask about any waste" autocomplete="off"><button class="btn">Send</button></form>
+</div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
+
