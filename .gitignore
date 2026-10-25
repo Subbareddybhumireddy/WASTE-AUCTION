@@ -11,3 +11,10 @@ db.json
 prisma/*.db
 prisma/*.db-journal
 npm-debug.log*
+node_modules/
+.next/
+.env
+.env.*
+!.env.example
+dist/
+build/
